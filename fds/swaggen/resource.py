@@ -85,23 +85,23 @@ def _clean_header(header):
 
 def _get_expect_args(expect, default_content_type='application/json'):
     content_type = default_content_type
-    examples = None
+    kwargs = {}
     if isinstance(expect, tuple):
         if len(expect) == 2:
             expect, content_type = expect
         elif len(expect) == 3:
-            expect, content_type, examples = expect
+            expect, content_type, kwargs = expect
         else:
             expect = expect[0]
-    return (expect, content_type, examples)
+    return (expect, content_type, kwargs)
 
 class SwagGen(Quart):
     def __init__(self, *args, title=None, contact=None, contact_url=None, contact_email=None,
-                 version='1.0', description=None, base_model_schema=None, **kwargs):
+                 version='1.0', description=None, base_model_schema=None, validate=True, **kwargs):
         super().__init__(*args, **kwargs)
         self._ref_resolver = None
         self._validators = {}
-        self._validate = True
+        self._validate = validate
         self._resources = []
         self._schema = None
         self.title = title
@@ -416,11 +416,11 @@ class Swagger(object):
             return params
 
         for expect in doc.get('expect', []):
-            validator, content_type, examples = _get_expect_args(expect)
-            if isinstance(expect, str):
-                validator = self.api.get_validator(expect)
-            elif isinstance(expect, Draft4Validator):
-                validator = expect
+            validator, content_type, kwargs = _get_expect_args(expect)
+            if isinstance(validator, str):
+                validator = self.api.get_validator(validator)
+            elif isinstance(validator, Draft4Validator):
+                validator = validator
             else:
                 validator = None
 
@@ -431,10 +431,9 @@ class Swagger(object):
             if '$ref' in schema and '/components/requestBodies/' in schema['$ref']:
                 return schema
 
-            params[content_type] = not_none({
-                'schema': self.serialize_schema(validator),
-                'examples': examples if examples else None,
-            })
+            params[content_type] = not_none(dict({
+                'schema': self.serialize_schema(validator)
+            }, **kwargs))
 
         return {'content': params}
 
