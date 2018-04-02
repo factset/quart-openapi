@@ -54,7 +54,7 @@ install_requires = pip('install')
 doc_require = pip('doc')
 
 setup(
-    name='fds.swaggen',
+    name='fds',
     version=__version__,
     description=__description__,
     long_description=long_description,
