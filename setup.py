@@ -63,6 +63,7 @@ setup(
     author_email='mtopol@factset.com',
     packages=find_packages(exclude=['tests', 'tests.*']),
     py_modules=['fds.swaggen'],
+    include_package_data=True,
     install_requires=install_requires,
     extras_require={
         'doc': doc_require,
