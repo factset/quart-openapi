@@ -1,5 +1,5 @@
 from quart import Quart, request, jsonify
-from quart.views import MethodView, HTTP_METHOD_FUNCTIONS
+from quart.views import MethodView, http_method_funcs
 from quart.routing import ROUTE_VAR_RE, Map as RouteMap
 import json
 from jsonschema import Draft4Validator, RefResolver, FormatChecker
@@ -187,7 +187,7 @@ class SwagGen(Quart):
     def _handle_doc(self, cls, doc):
         # adapted from flask_restplus
         expand_params_desc(doc)
-        for http_method in HTTP_METHOD_FUNCTIONS:
+        for http_method in http_method_funcs:
             if http_method in doc:
                 if doc[http_method] is False:
                     continue
