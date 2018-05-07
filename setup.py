@@ -52,6 +52,8 @@ exec(compile(open('fds/swaggen/__about__.py').read(), 'fds/swaggen/__about__.py'
 
 install_requires = pip('install')
 doc_require = pip('doc')
+setup_requires = pip('setup')
+tests_require = pip('test')
 
 setup(
     name='fds.swaggen',
@@ -65,6 +67,8 @@ setup(
     py_modules=['fds.swaggen'],
     include_package_data=True,
     install_requires=install_requires,
+    setup_requires=setup_requires,
+    tests_require=tests_require,
     extras_require={
         'doc': doc_require,
     },

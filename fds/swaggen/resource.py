@@ -112,11 +112,15 @@ class SwagGen(Quart):
         self.contact_email = contact_email
         self.config['JSON_SORT_KEYS'] = False
         if base_model_schema is not None:
-            schema = None
-            with open(base_model_schema, 'r') as f:
-                schema = json.load(f)
-            self._ref_resolver = RefResolver.from_schema(schema)
-        self.add_url_rule('/swagger.json', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
+            if isinstance(base_model_schema, str):
+                with open(base_model_schema, 'r', encoding='utf-8') as f:
+                    schema = json.load(f)
+                self._ref_resolver = RefResolver.from_schema(schema)
+            elif isinstance(base_model_schema, dict):
+                self._ref_resolver = RefResolver.from_schema(base_model_schema)
+            elif isinstance(base_model_schema, RefResolver):
+                self._ref_resolver = base_model_schema
+        self.add_url_rule('/swagger.json', 'swagger.json', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
         self.register_error_handler(ValidationError, self.handle_json_validation_exc)
 
     @staticmethod
@@ -148,13 +152,13 @@ class SwagGen(Quart):
     def get_validator(self, name):
         return self._validators[name] if name in self._validators else None
 
-    def add_resource(self, resource, path, methods, *args, provide_automatic_options=True):
+    def add_resource(self, resource, path, methods, endpoint=None, *args, provide_automatic_options=True):
         view_func = resource
         if isclass(resource):
             view_func = resource.as_view(camel_to_snake(resource.__name__), *args)
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
-        self.add_url_rule(path, view_func, methods, provide_automatic_options=provide_automatic_options)
+        self.add_url_rule(path, endpoint, view_func, methods, provide_automatic_options=provide_automatic_options)
 
     def param(self, name, description=None, _in='query', **kwargs):
         param = kwargs
@@ -263,6 +267,8 @@ class Swagger(object):
         self._components[category][name] = schema
 
     def serialize_components(self):
+        if self.api.base_model is None:
+            return {}
         base_components = self.api.base_model.resolve('#/components')[1]
         for category, val in base_components.items():
             for name, schema in val.items():
@@ -284,10 +290,17 @@ class Swagger(object):
     def parameters_for(self, doc):
         params = []
         for name, param in doc['params'].items():
+            if 'ref' in param:
+                if isinstance(param['ref'], str) and param['ref'].startswith('#/components/'):
+                    params.append({'$ref': param['ref']})
+                else:
+                    params.append(self.serialize_schema(param['ref']))
+                continue
+
             param['name'] = name
             if 'schema' not in param:
                 param['schema'] = {}
-            if 'type' not in param['schema']:
+            if 'type' not in param['schema'] and '$ref' not in param['schema']:
                 param['schema']['type'] = 'string'
             if 'in' not in param:
                 param['in'] = 'query'
