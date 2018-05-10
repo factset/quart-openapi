@@ -3,6 +3,9 @@
 import os
 import re
 from setuptools import setup, find_packages
+from sphinx.setup_command import BuildDoc
+
+cmdclass = {'build_sphinx': BuildDoc}
 
 # Taken from flask-restplus setup.py
 
@@ -57,9 +60,14 @@ tests_require = pip('test')
 
 setup(
     name='fds.swaggen',
-    version=__version__,
+    version=__release__,
     description=__description__,
     long_description=long_description,
+    cmdclass=cmdclass,
+    command_options={
+        'build_sphinx': {
+            'version': ('setup.py', __short_version__),
+            'release': ('setup.py', __release__)}},
     url='<redacted>',
     author='Matt Topol',
     author_email='mtopol@factset.com',

@@ -1,10 +1,19 @@
 # -*- coding: utf-8 -*-
-from .resource import SwagGen, Resource
-from .__about__ import __version__, __description__
+from .resource import Resource
+from .swaggen import SwagGen, SwaggerView
+from .swagger import Swagger
+from .__about__ import __short_version__, __description__, __release__
 
-__all__ = {
-    '__version__',
+Resource.__module__ = __name__
+SwagGen.__module__ = __name__
+Swagger.__module__ = __name__
+
+__all__ = [
+    '__short_version__',
     '__description__',
+    '__release__',
     'SwagGen',
-    'Resource'
-}
+    'Resource',
+    'Swagger',
+    'SwaggerView'
+]

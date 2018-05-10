@@ -4,17 +4,15 @@
    contain the root `toctree` directive.
 
 Welcome to SwagGen's documentation!
-===================================
+=====================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 4
 
-   api
+   modules
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

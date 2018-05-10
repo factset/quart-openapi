@@ -23,16 +23,19 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-project = 'SwagGen'
-copyright = '2018, mtopol'
-author = 'mtopol'
+from jsonschema import RefResolver
+RefResolver.__module__ = 'jsonschema'
+
+#project = 'SwagGen'
+#copyright = '2018, mtopol'
+author = 'Matt Topol <mtopol@factset.com>'
 
 # The short X.Y version
-version = '1.0'
+#version = '1.3'
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+#release = '1.3.0'
 
-
+add_module_names = False
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -44,6 +47,7 @@ release = '1.0.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx_autodoc_typehints',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
@@ -79,6 +83,17 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+rst_epilog = """
+|epi_pre| |release|\ |epi_post|
+
+.. |epi_pre| raw:: html
+
+   <sub>Generated from version
+
+.. |epi_post| raw:: html
+
+   </sub>
+"""
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -91,7 +106,9 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'description': 'Python module to add flask-restplus like Swagger generation to a Quart app'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -106,7 +123,12 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html'
+    ]
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -171,7 +193,11 @@ texinfo_documents = [
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3.6', None),
+    'quart': ('https://pgjones.gitlab.io/quart', None),
+    'jsonschema': ('https://python-jsonschema.readthedocs.io/en/latest', None)
+}
 
 # -- Options for todo extension ----------------------------------------------
 
