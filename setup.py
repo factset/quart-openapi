@@ -77,9 +77,6 @@ setup(
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
-    extras_require={
-        'doc': doc_require,
-    },
     license='FactSet License',
     namespace_packages=['fds'],
     keywords='quart swagger api rest openapi'
