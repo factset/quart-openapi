@@ -79,7 +79,7 @@ setup(
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
-    license='FactSet License',
+    license='Apache 2.0',
     namespace_packages=['fds'],
     keywords='quart swagger api rest openapi',
     extras_require={
