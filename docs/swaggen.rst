@@ -1,6 +1,6 @@
 .. _swaggen:
 
-.. currentmodule:: fds.swaggen
+.. currentmodule:: swaggen
 
 SwagGen Class
 =============

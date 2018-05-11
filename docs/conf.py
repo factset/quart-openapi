@@ -21,19 +21,21 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../fds'))
 
 from jsonschema import RefResolver
 RefResolver.__module__ = 'jsonschema'
 
-#project = 'SwagGen'
-#copyright = '2018, mtopol'
+from swaggen import __short_version__, __release__, __description__
+
+project = 'SwagGen'
+copyright = '2018, Matt Topol'
 author = 'Matt Topol <mtopol@factset.com>'
 
 # The short X.Y version
-#version = '1.3'
+version = __short_version__
 # The full version, including alpha/beta/rc tags
-#release = '1.3.0'
+release = __release__
 
 add_module_names = False
 # -- General configuration ---------------------------------------------------
@@ -107,7 +109,7 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
-    'description': 'Python module to add flask-restplus like Swagger generation to a Quart app'
+    'description': __description__
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

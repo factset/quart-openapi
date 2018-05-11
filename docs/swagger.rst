@@ -3,7 +3,7 @@
 Swagger Class
 =============
 
-.. currentmodule:: fds.swaggen
+.. currentmodule:: swaggen
 
 .. autoclass:: Swagger
    :members:

@@ -3,7 +3,7 @@
 Resource Class
 ==============
 
-.. currentmodule:: fds.swaggen
+.. currentmodule:: swaggen
 
 .. autoclass:: Resource
    :members:
