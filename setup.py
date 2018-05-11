@@ -3,9 +3,6 @@
 import os
 import re
 from setuptools import setup, find_packages
-from sphinx.setup_command import BuildDoc
-
-cmdclass = {'build_sphinx': BuildDoc}
 
 # Taken from flask-restplus setup.py
 
@@ -58,16 +55,21 @@ doc_require = pip('doc')
 setup_requires = pip('setup')
 tests_require = pip('test')
 
+try:
+    from sphinx.setup_command import BuildDoc
+    sphinx_opts = {'cmdclass': {'build_sphinx': BuildDoc},
+                   'command_options': {
+                       'build_sphinx': {
+                           'version': ('setup.py', __short_version__),
+                           'release': ('setup.py', __release__)}}}
+except ImportError:
+    sphinx_opts = {}
+
 setup(
     name='fds.swaggen',
     version=__release__,
     description=__description__,
     long_description=long_description,
-    cmdclass=cmdclass,
-    command_options={
-        'build_sphinx': {
-            'version': ('setup.py', __short_version__),
-            'release': ('setup.py', __release__)}},
     url='<redacted>',
     author='Matt Topol',
     author_email='mtopol@factset.com',
@@ -79,6 +81,10 @@ setup(
     tests_require=tests_require,
     license='FactSet License',
     namespace_packages=['fds'],
-    keywords='quart swagger api rest openapi'
+    keywords='quart swagger api rest openapi',
+    extras_require={
+        'doc': doc_require
+    },
+    **sphinx_opts
 )
 
