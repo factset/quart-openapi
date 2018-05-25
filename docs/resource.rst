@@ -3,7 +3,7 @@
 Resource Class
 ==============
 
-.. currentmodule:: swaggen
+.. currentmodule:: factset.swaggen
 
 .. autoclass:: Resource
    :members:

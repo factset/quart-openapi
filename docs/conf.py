@@ -21,15 +21,15 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../fds'))
+sys.path.insert(0, os.path.abspath('../'))
 
 from jsonschema import RefResolver
 RefResolver.__module__ = 'jsonschema'
 
-from swaggen import __short_version__, __release__, __description__
+from factset.swaggen import __short_version__, __release__, __description__
 
 project = 'SwagGen'
-copyright = '2018, Matt Topol'
+copyright = '2018, FactSet Research Systems, Inc.'
 author = 'Matt Topol <mtopol@factset.com>'
 
 # The short X.Y version
@@ -37,7 +37,7 @@ version = __short_version__
 # The full version, including alpha/beta/rc tags
 release = __release__
 
-add_module_names = False
+add_module_names = True
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

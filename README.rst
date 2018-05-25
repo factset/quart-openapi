@@ -23,4 +23,4 @@ You can install via pip
 
 .. code-block:: console
 
-    $ pip install fds.swaggen
+    $ pip install factset.swaggen

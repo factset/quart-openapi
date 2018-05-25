@@ -3,7 +3,7 @@
 Swagger Class
 =============
 
-.. currentmodule:: swaggen
+.. currentmodule:: factset.swaggen
 
 .. autoclass:: Swagger
    :members:

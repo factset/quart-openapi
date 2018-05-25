@@ -1,6 +1,6 @@
 .. _swaggen:
 
-.. currentmodule:: swaggen
+.. currentmodule:: factset.swaggen
 
 SwagGen Class
 =============

@@ -5,8 +5,8 @@
 
 .. title:: SwagGen
 
-Welcome to SwagGen's documentation!
-=====================================
+Documentation for factset.swaggen!
+==================================
 
 .. include:: ../README.rst
    :start-after: inclusion-marker-do-not-remove

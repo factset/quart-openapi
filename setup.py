@@ -48,7 +48,7 @@ long_description = '\n'.join((
     ''
 ))
 
-exec(compile(open('fds/swaggen/__about__.py').read(), 'fds/swaggen/__about__.py', 'exec'))
+exec(compile(open('factset/swaggen/__about__.py').read(), 'factset/swaggen/__about__.py', 'exec'))
 
 install_requires = pip('install')
 doc_require = pip('doc')
@@ -66,22 +66,21 @@ except ImportError:
     sphinx_opts = {}
 
 setup(
-    name='fds.swaggen',
+    name='factset-swaggen',
     version=__release__,
     description=__description__,
     long_description=long_description,
-    url='<redacted>',
+    url='https://github.com/factset/swaggen',
     author='Matt Topol',
     author_email='mtopol@factset.com',
-    packages=find_packages(exclude=['tests', 'tests.*']),
-    py_modules=['fds.swaggen'],
+    packages=['factset.swaggen'],
     include_package_data=True,
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
     license='Apache 2.0',
-    namespace_packages=['fds'],
-    keywords='quart swagger api rest openapi',
+    namespace_packages=['factset'],
+    keywords='quart swagger api rest openapi flask',
     extras_require={
         'doc': doc_require
     },
