@@ -67,5 +67,14 @@ Except that by using :py:class:`~factset.swaggen.SwagGen` and :py:class:`~factse
 add a route for '/swagger.json' which will contain the documentation of the route and use the docstring for the
 description.
 
+Unit Tests
+==========
+
+Unit tests can be run through setuptools also:
+
+.. code-block:: console
+
+    $ python setup.py test
+
 .. _Quart: https://pgjones.gitlab.io/quart/
 .. _Flask-RESTPlus: https://flask-restplus.readthedocs.io/en/stable/
