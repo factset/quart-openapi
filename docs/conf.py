@@ -109,7 +109,15 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
-    'description': __description__
+    'description': __description__,
+    'fixed_sidebar': True,
+    'sidebar_collapse': False,
+    'github_user': 'factset',
+    'github_repo': 'swaggen',
+    'github_button': False,
+    'extra_nav_links': {
+        'Index': 'genindex.html'
+    }
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -128,7 +136,8 @@ html_static_path = ['_static']
 html_sidebars = {
     '**': [
         'about.html',
-        'navigation.html'
+        'navigation.html',
+        'searchbox.html'
     ]
 }
 

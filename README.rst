@@ -76,5 +76,80 @@ Unit tests can be run through setuptools also:
 
     $ python setup.py test
 
+Request Validation
+==================
+
+Request validation like you can get with Flask-RESTPlus_!
+
+You can either create validator models on the fly or you can create a jsonschema document for base models
+and then use references to it. For an on-the-fly validator:
+
+.. code-block:: python
+
+    expected = app.create_validator('sample_request', {
+      'type': 'object',
+      'properties': {
+        'foobar': {
+          'type': 'string'
+        },
+        'baz': {
+          'oneOf': [
+            { 'type': 'integer' },
+            { 'type': 'number', 'format': 'float' }
+          ]
+        }
+      }
+    })
+
+    @app.route('/')
+    class Sample(Resource):
+      @app.expect(expected)
+      async def post(self):
+        # won't get here if the request didn't match the expected schema
+        data = await request.get_json()
+        return jsonify(data)
+
+
+The default content type is 'application/json', but you can specify otherwise in the decorator:
+
+.. code-block:: json
+   :caption: schema.json
+
+   {
+     "$schema": "http://json-schema.org/schema#",
+     "id": "schema.json",
+     "components": {
+       "schemas": {
+         "binaryData": {
+           "type": "string",
+           "format": "binary"
+         }
+       }
+     }
+   }
+
+.. code-block:: python
+   :caption: app.py
+
+   app = SwagGen(__name__, title='Validation Example',
+                 base_model_schema='schema.json')
+   stream = app.create_ref_validator('binaryData', 'schemas')
+
+   @app.route('/')
+   class Binary(Resource):
+     @app.expect((stream, 'application/octet-stream',
+                  {'description': 'gzip compressed data'}))
+     @app.response(HTTPStatus.OK, 'Success')
+     async def post(self):
+       # if the request didn't have a 'content-type' header with a value
+       # of 'application/octet-stream' it will be rejected as invalid.
+       raw_data = await request.get_data(raw=True)
+       # ... do something with the data
+       return "Success!"
+
+In the example above, it'll open, read, and json parse the file *schema.json* and then use it as the basis
+for referencing models and creating validators. Currently the validator won't do more than validate content-type
+for content-types other than 'application/json'.
+
 .. _Quart: https://pgjones.gitlab.io/quart/
 .. _Flask-RESTPlus: https://flask-restplus.readthedocs.io/en/stable/
