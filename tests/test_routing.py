@@ -1,5 +1,5 @@
 import pytest
-from fds.swaggen import SwagGen, Resource
+from factset.swaggen import SwagGen, Resource
 from jsonschema import RefResolver
 from quart import request, jsonify
 from http import HTTPStatus

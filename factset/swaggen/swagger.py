@@ -88,7 +88,7 @@ def _extract_path_params(path: str) -> OrderedDict:
 
 class Swagger(object):
     """Class for generating a swagger.json from the resources and information defined with
-    :class:`~fds.swaggen.SwagGen`"""
+    :class:`~factset.swaggen.SwagGen`"""
 
     def __init__(self, api: SwagGen) -> None:
         """Construct a Swagger object for generating the Swagger Json

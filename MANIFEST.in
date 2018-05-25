@@ -1,5 +1,5 @@
 include README.rst MANIFEST.in
-recursive-include fds *
+recursive-include factset *
 recursive-include requirements *.pip
 
 global-exclude *.pyc
