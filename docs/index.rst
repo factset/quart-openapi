@@ -5,7 +5,7 @@
 
 .. title:: Quart OpenAPI
 
-Documentation for factset.quart_openapi!
+Documentation for Quart-OpenAPI!
 ========================================
 
 .. include:: ../README.rst
