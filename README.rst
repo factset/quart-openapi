@@ -1,17 +1,17 @@
-====
-Pint
-====
+=============
+Quart-OpenAPI
+=============
 
 .. inclusion-marker-do-not-remove
 
-Pint is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
+Quart-OpenAPI is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
 If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTPlus_
 generating a swagger.json route and adds a Resource base class for building RESTful APIs.
 
 Compatibility
 =============
 
-Pint requires Python 3.6+ because Quart_ requires it.
+Quart-OpenAPI requires Python 3.6+ because Quart_ requires it.
 
 Installation
 ============
