@@ -6,7 +6,7 @@
 .. title:: Quart OpenAPI
 
 Documentation for factset.quart_openapi!
-==================================
+========================================
 
 .. include:: ../README.rst
    :start-after: inclusion-marker-do-not-remove
