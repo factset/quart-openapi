@@ -1,17 +1,17 @@
-=======
-SwagGen
-=======
+====
+Pint
+====
 
 .. inclusion-marker-do-not-remove
 
-SwagGen is an extension for Quart_ that adds support for generating a swagger.json file using openapi 3.0.
-If you are familiar with Quart_, this just wraps around it to add a swagger.json route similar to Flask-RESTPlus_
-and adds a Resource base class for building RESTful APIs.
+Pint is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
+If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTPlus_
+generating a swagger.json route and adds a Resource base class for building RESTful APIs.
 
 Compatibility
 =============
 
-SwagGen requires Python 3.6+ because Quart_ requires it.
+Pint requires Python 3.6+ because Quart_ requires it.
 
 Installation
 ============
@@ -20,14 +20,14 @@ You can install via pip
 
 .. code-block:: console
 
-    $ pip install factset.swaggen
+    $ pip install factset.quart_openapi
 
 If you are developing the module and want to also be able to build the documentation, make sure
 to also install the dependencies from the extras 'doc' package like so:
 
 .. code-block:: console
 
-    $ pip install 'factset.swaggen[doc]'
+    $ pip install 'factset.quart_openapi[doc]'
     $ python setup.py build_sphinx
 
 Quick Start
@@ -37,9 +37,9 @@ If you're familiar with Quart_ then the quick start doesn't change much:
 
 .. code-block:: python
 
-    from factset.swaggen import SwagGen, Resource
+    from factset.quart_openapi import Pint, Resource
 
-    app = SwagGen(__name__, title='Sample App')
+    app = Pint(__name__, title='Sample App')
 
     @app.route('/')
     class Root(Resource):
@@ -47,7 +47,7 @@ If you're familiar with Quart_ then the quick start doesn't change much:
         '''Hello World Route
 
         This docstring will show up as the description and short-description
-        for the swagger docs for this route.
+        for the openapi docs for this route.
         '''
         return "hello"
 
@@ -63,8 +63,8 @@ This is equivalent to using the following with Quart_ as normal:
     async def hello():
       return "hello"
 
-Except that by using :py:class:`~factset.swaggen.SwagGen` and :py:class:`~factset.swaggen.Resource` it will also
-add a route for '/swagger.json' which will contain the documentation of the route and use the docstring for the
+Except that by using :py:class:`~factset.quart_openapi.Pint` and :py:class:`~factset.quart_openapi.Resource` it will also
+add a route for '/openapi.json' which will contain the documentation of the route and use the docstring for the
 description.
 
 Unit Tests
@@ -131,7 +131,7 @@ The default content type is 'application/json', but you can specify otherwise in
 .. code-block:: python
    :caption: app.py
 
-   app = SwagGen(__name__, title='Validation Example',
+   app = Pint(__name__, title='Validation Example',
                  base_model_schema='schema.json')
    stream = app.create_ref_validator('binaryData', 'schemas')
 

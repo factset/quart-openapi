@@ -46,17 +46,17 @@ def parse_docstring(obj: object) -> Dict[str, Union[str, List, Dict[str, str], N
     return parsed
 
 def extract_path(path: str) -> str:
-    """Transform the Quart/Flask/Werkzeug URL patterns to a swagger one
+    """Transform the Quart/Flask/Werkzeug URL patterns to an openapi one
 
     :param path: the URL Pattern
-    :return: the pattern in the swagger format for path params
+    :return: the pattern in the openapi format for path params
     """
     return _RE_URL.sub(r'{\1}', path)
 
 class cached_property(object):
     """A quick class to cache an object property produced by a function, to be used in place
     of `@property` if the function to return the value of a property is expensive. Currently
-    used to cache the result of the Swagger docs for serving quickly to '/swagger.json'.
+    used to cache the result of the OpenApi docs for serving quickly to '/openapi.json'.
 
     It will properly forward the docstring of the decorated function and cache the output of
     the property function after the first call to it.

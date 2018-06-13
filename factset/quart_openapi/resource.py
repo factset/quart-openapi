@@ -31,24 +31,24 @@ def get_expect_args(expect: ExpectedDescList,
     return (expect, content_type, kwargs)
 
 class Resource(MethodView):
-    """Inherit from this to create RESTful routes with swagger docs
+    """Inherit from this to create RESTful routes with openapi docs
 
     A Resource subclass needs only to implement async functions corresponding to the HTTP
-    verbs you want to handle. Utilizing the decorators from :class:`SwagGen` you can set
-    the route, params, responses, and so on that will show up in the swagger documentation.
+    verbs you want to handle. Utilizing the decorators from :class:`Pint` you can set
+    the route, params, responses, and so on that will show up in the openapi documentation.
 
     An example is,
 
     .. code-block:: python
 
-          app = SwagGen('sample')
+          app = Pint('sample')
           @app.route('/<id>')
           class SimpleRoute(Resource):
             async def get(self, id):
               return f"ID is {id}"
 
     That will enable a route '/<id>' which will return the string "ID is <id>" when called
-    by a GET request. If using :meth:`SwagGen.expect` to define the expected request body,
+    by a GET request. If using :meth:`Pint.expect` to define the expected request body,
     it will perform validation unless validate is set to false.
     """
 
@@ -67,7 +67,7 @@ class Resource(MethodView):
     async def validate_payload(self, func: Callable) -> bool:
         """This will perform validation
 
-        Will check the api docs of the class as set by using the decorators in :class:`SwagGen`
+        Will check the api docs of the class as set by using the decorators in :class:`Pint`
         and if an expect was present without `validate` set to `False` or `None`, it will
         attempt to validate any request against the schema if json, or ensure the content_type
         matches at least.

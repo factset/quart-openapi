@@ -26,9 +26,9 @@ sys.path.insert(0, os.path.abspath('../'))
 from jsonschema import RefResolver
 RefResolver.__module__ = 'jsonschema'
 
-from factset.swaggen import __short_version__, __release__, __description__
+from factset.quart_openapi import __short_version__, __release__, __description__
 
-project = 'SwagGen'
+project = 'Quart-OpenApi'
 copyright = '2018, FactSet Research Systems, Inc.'
 author = 'Matt Topol <mtopol@factset.com>'
 
@@ -113,7 +113,7 @@ html_theme_options = {
     'fixed_sidebar': True,
     'sidebar_collapse': False,
     'github_user': 'factset',
-    'github_repo': 'swaggen',
+    'github_repo': 'quart-openapi',
     'github_button': False,
     'extra_nav_links': {
         'Index': 'genindex.html'
@@ -145,7 +145,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SwagGendoc'
+htmlhelp_basename = 'QuartOpenApiDoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -172,7 +172,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'SwagGen.tex', 'SwagGen Documentation',
+    (master_doc, 'Quart-OpenAPI.tex', 'Quart OpenAPI Documentation',
      'mtopol', 'manual'),
 ]
 
@@ -182,7 +182,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'swaggen', 'SwagGen Documentation',
+    (master_doc, 'quart_openapi', 'Quart OpenAPI Documentation',
      [author], 1)
 ]
 
@@ -193,8 +193,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'SwagGen', 'SwagGen Documentation',
-     author, 'SwagGen', 'One line description of project.',
+    (master_doc, 'Quart-OpenAPI', 'Quart OpenAPI Documentation',
+     author, 'Quart-OpenAPI', 'One line description of project.',
      'Miscellaneous'),
 ]
 

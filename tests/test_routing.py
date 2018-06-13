@@ -1,12 +1,12 @@
 import pytest
-from factset.swaggen import SwagGen, Resource
+from factset.quart_openapi import Pint, Resource
 from jsonschema import RefResolver
 from quart import request, jsonify
 from http import HTTPStatus
 
 @pytest.fixture
 def app():
-    app = SwagGen('test', title='App Test', contact='foo',
+    app = Pint('test', title='App Test', contact='foo',
                   contact_email='moo@bar.com', description='Sample Desc')
     return app
 
@@ -24,7 +24,7 @@ async def test_simple_app(app):
 @pytest.mark.asyncio
 async def test_swagger_route(app):
     client = app.test_client()
-    rv = await client.get('/swagger.json')
+    rv = await client.get('/openapi.json')
     assert rv.status_code == HTTPStatus.OK
     data = await rv.get_json()
     assert data['info']['title'] == 'App Test'
@@ -86,7 +86,7 @@ async def test_params(app):
     client = app.test_client()
 
     # test that the swagger has the info
-    rv = await client.get('/swagger.json')
+    rv = await client.get('/openapi.json')
     assert rv.status_code == HTTPStatus.OK
     methods = [x.strip() for x in rv.headers['access-control-allow-methods'].split(',')]
     assert 'HEAD' in methods
@@ -167,7 +167,7 @@ TEST_BASE_MODEL_SCHEMA = {
 
 @pytest.mark.asyncio
 async def test_base_model_obj():
-    app = SwagGen('test', title='App Test', contact='foo',
+    app = Pint('test', title='App Test', contact='foo',
                   contact_email='moo@bar.com', description='Sample Desc',
                   base_model_schema=TEST_BASE_MODEL_SCHEMA)
 
@@ -216,7 +216,7 @@ async def test_base_model_obj():
 @pytest.mark.asyncio
 @pytest.mark.xfail
 async def test_required_query():
-    app = SwagGen('test', title='App Test', contact='foo',
+    app = Pint('test', title='App Test', contact='foo',
                   contact_email='moo@bar.com', description='Sample Desc',
                   base_model_schema=TEST_BASE_MODEL_SCHEMA)
 
@@ -238,14 +238,14 @@ def test_base_model_file(tmpdir):
     tmp_schema = tmpdir.join('schema.json')
     tmp_schema.write_text(json.dumps(TEST_BASE_MODEL_SCHEMA), encoding='utf-8')
 
-    app = SwagGen('test', base_model_schema=str(tmp_schema.realpath()))
+    app = Pint('test', base_model_schema=str(tmp_schema.realpath()))
 
     assert isinstance(app.base_model, RefResolver)
     assert app.base_model.base_uri == 'schema.json'
 
 def test_base_model_ref_resolve():
     base_model = RefResolver.from_schema(TEST_BASE_MODEL_SCHEMA)
-    app = SwagGen('test', base_model_schema=base_model)
+    app = Pint('test', base_model_schema=base_model)
 
     assert isinstance(app.base_model, RefResolver)
     assert app.base_model.base_uri == 'schema.json'

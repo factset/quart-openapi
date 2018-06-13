@@ -3,7 +3,7 @@
 Swagger Class
 =============
 
-.. currentmodule:: factset.swaggen
+.. currentmodule:: factset.quart_openapi
 
 .. autoclass:: Swagger
    :members:

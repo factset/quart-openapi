@@ -48,7 +48,7 @@ long_description = '\n'.join((
     ''
 ))
 
-exec(compile(open('factset/swaggen/__about__.py').read(), 'factset/swaggen/__about__.py', 'exec'))
+exec(compile(open('factset/quart_openapi/__about__.py').read(), 'factset/quart_openapi/__about__.py', 'exec'))
 
 install_requires = pip('install')
 doc_require = pip('doc')
@@ -66,20 +66,19 @@ except ImportError:
     sphinx_opts = {}
 
 setup(
-    name='factset-swaggen',
+    name='quart-openapi',
     version=__release__,
     description=__description__,
     long_description=long_description,
-    url='https://github.com/factset/swaggen',
+    url='https://github.com/factset/quart-openapi',
     author='Matt Topol',
     author_email='mtopol@factset.com',
-    packages=['factset.swaggen'],
+    packages=['factset.quart_openapi'],
     include_package_data=True,
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
     license='Apache 2.0',
-    namespace_packages=['factset'],
     keywords='quart swagger api rest openapi flask',
     extras_require={
         'doc': doc_require

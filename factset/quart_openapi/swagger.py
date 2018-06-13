@@ -3,7 +3,7 @@ from jsonschema import Draft4Validator
 from itertools import chain
 from collections import OrderedDict, Hashable
 from http import HTTPStatus
-from .swaggen import SwagGen
+from .pint import Pint
 from .resource import Resource, get_expect_args
 from .utils import parse_docstring, not_none, merge, extract_path
 from .typing import ValidatorTypes, HeaderType
@@ -87,11 +87,11 @@ def _extract_path_params(path: str) -> OrderedDict:
     return params
 
 class Swagger(object):
-    """Class for generating a swagger.json from the resources and information defined with
-    :class:`~factset.swaggen.SwagGen`"""
+    """Class for generating a openapi.json from the resources and information defined with
+    :class:`~factset.swaggen.Pint`"""
 
-    def __init__(self, api: SwagGen) -> None:
-        """Construct a Swagger object for generating the Swagger Json
+    def __init__(self, api: Pint) -> None:
+        """Construct a Swagger object for generating the openapi Json
 
         :param api: the main app interface for getting the base model and resources
         """
@@ -107,7 +107,7 @@ class Swagger(object):
     def as_dict(self) -> Dict[str, Any]:
         """Return a dict which can be used with the :mod:`json` module to return valid json"""
         infos = {
-            'title': self.api.title or 'Swagger App',
+            'title': self.api.title or 'OpenApi Rest Documentation',
             'version': self.api.version or '1.0'
         }
         if self.api.description:
@@ -139,7 +139,7 @@ class Swagger(object):
         return not_none(spec)
 
     def register_component(self, category: str, name: str, schema: Dict[str, Any]) -> None:
-        """Used for populating the components_ section of the swagger
+        """Used for populating the components_ section of the openapi docs
 
         :param category: The category under the component section
         :param name: The name of the model for reference
@@ -207,7 +207,7 @@ class Swagger(object):
         return params
 
     def operation_id_for(self, doc: Dict[str, Any], method: str) -> str:
-        """Return the operation id to be used for swagger
+        """Return the operation id to be used for openapi docs
 
         :param doc: a mapping from HTTP verb to the properties for serialization
         :param method: the HTTP Verb
@@ -301,7 +301,7 @@ class Swagger(object):
 
     def serialize_resource(self, resource: Union[Resource, Callable], path: str,
                            methods: Iterable[str]) -> Dict[str, Any]:
-        """Use the docstring and any decorated info to create the resource object for swagger
+        """Use the docstring and any decorated info to create the resource object
 
         :param resource: the Resource object or view function
         :param path: the route path for this resource
@@ -327,7 +327,7 @@ class Swagger(object):
 
         :param doc: a mapping from HTTP verb to the properties for serialization
         :param method: The HTTP verb for this operation
-        :return: The dict swagger representation to be converted to json for this operation
+        :return: The dict openapi representation to be converted to json for this operation
         """
         operation = {
             'summary': doc[method]['docstring']['summary'],

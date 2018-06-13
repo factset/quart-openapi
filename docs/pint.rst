@@ -1,11 +1,11 @@
-.. _swaggen:
+.. _pint:
 
-.. currentmodule:: factset.swaggen
+.. currentmodule:: factset.quart_openapi
 
-SwagGen Class
+Pint Class
 =============
 
-.. autoclass:: SwagGen
+.. autoclass:: Pint
    :members:
    :show-inheritance:
 

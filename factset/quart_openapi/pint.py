@@ -25,12 +25,12 @@ def _expand_params_desc(data: Dict[str, Any]) -> None:
             if isinstance(description, str):
                 data['params'][name] = {'description': description}
 
-class SwagGen(Quart):
+class Pint(Quart):
     """Use this instead of instantiating :class:`quart.Quart`
 
     This takes the place of instantiating a :class:`quart.Quart` instance. It will forward
-    any init arguments to Quart and takes arguments to fill out the metadata for the swagger
-    documentation it generates that will automatically be accessible via the '/swagger.json'
+    any init arguments to Quart and takes arguments to fill out the metadata for the openapi
+    documentation it generates that will automatically be accessible via the '/openapi.json'
     route.
     """
 
@@ -39,15 +39,15 @@ class SwagGen(Quart):
                  version: str='1.0', description: Optional[str]=None, validate: bool=True,
                  base_model_schema: Optional[Union[str, Dict[str, Any], RefResolver]]=None,
                  **kwargs: Any) -> None:
-        """Construct a SwagGen
+        """Construct a Pint
 
         :param \*args: non-keyword args for :class:`~quart.Quart`
-        :param title: The title for the info section of the swagger
-        :param contact: Contact name for swagger
+        :param title: The title for the info section
+        :param contact: Contact name for docs
         :param contact_url: URL for Contact property of the info section
-        :param contact_email: Email Contact for swagger info
-        :param version: Version to put in the swagger
-        :param description: Textual description for the swagger json
+        :param contact_email: Email Contact for docs
+        :param version: Version to put in the docs
+        :param description: Textual description for the openapi json
         :param validate: The default validation state for routes that have an expect
         :param base_model_schema: Allows defining a base jsonschema to reference models either by
                                   file name, or by passing in the actual schema dict.
@@ -76,7 +76,7 @@ class SwagGen(Quart):
                 self._ref_resolver = RefResolver.from_schema(base_model_schema)
             elif isinstance(base_model_schema, RefResolver):
                 self._ref_resolver = base_model_schema
-        self.add_url_rule('/swagger.json', 'swagger.json', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
+        self.add_url_rule('/openapi.json', 'openapi.json', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
         self.register_error_handler(ValidationError, self.handle_json_validation_exc)
 
     @staticmethod
@@ -139,7 +139,7 @@ class SwagGen(Quart):
                      path: str, methods: Iterable[str], endpoint: Optional[str]=None, *args,
                      provide_automatic_options: bool=True) -> None:
         """Called by :meth:`route` in order to process the resource or view function and only add it to the
-        list of swagger resources if it's a class, allowing paths to be left out of the swagger documentation
+        list of openapi resources if it's a class, allowing paths to be left out of the openapi documentation
         by declaring them as functions.
 
         :param resource: The class or view function to add
@@ -163,7 +163,7 @@ class SwagGen(Quart):
         :param name: Parameter name in documention
         :param description: the description property of the parameter object
         :param _in: Location of the parameter: query, header, path, cookie
-        :param \*\*kwargs: mapping of properties to forward for the swagger docs
+        :param \*\*kwargs: mapping of properties to forward for the openapi docs
 
         If put at the class level, it'll add the parameter to all method types. For path params
         you should use :meth:`doc` instead which will automatically handle path params instead of
@@ -186,7 +186,7 @@ class SwagGen(Quart):
                 @app.param('foobar', description='foobar will show up for the post method, but not get',
                            _in='cookie', style='form')
                 async def post(self):
-                  # the swagger documentation will contain both the Expected-Header and
+                  # the openapi documentation will contain both the Expected-Header and
                   # the 'foobar' cookie params in it
                   ...
                   return "Success"
@@ -231,7 +231,7 @@ class SwagGen(Quart):
         :param methods: list of HTTP verbs allowed to be routed
         :param \*args: will forward extra arguments to the :meth:`base class route function <quart.Quart.route>`
 
-        Ensures we add the route's documentation to the swagger docs and merge the properties correctly,
+        Ensures we add the route's documentation to the openapi docs and merge the properties correctly,
         should work identically to using the base method.
 
         .. seealso:: Base class version :meth:`~quart.Quart.route`
@@ -253,9 +253,9 @@ class SwagGen(Quart):
         :return: The validator object
 
         The resulting validator can be passed into decorators like :meth:`param` or :meth:`response`
-        and will be used to create the schema in the swagger json output or passed into :meth:`expect`
+        and will be used to create the schema in the openapi json output or passed into :meth:`expect`
         to use it for actually validating a request against the schema. It will be output as a '$ref'
-        object in the resulting swagger json output.
+        object in the resulting openapi json output.
 
         .. seealso:: The :meth:`expect` decorator
 
@@ -383,7 +383,7 @@ class SwagGen(Quart):
                   # or 'text/plain' it will be rejected as a bad request.
                   ...
 
-        In the above example, the examples will be in the swagger docs as per the `openapi 3.0 spec
+        In the above example, the examples will be in the openapi docs as per the `openapi 3.0 spec
         <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#request-body-object>`_.
 
         .. todo:: figure out a good way to set the description for the requestBody itself, probably through
@@ -409,22 +409,22 @@ class SwagGen(Quart):
         return '{0}_{1}'.format(method, camel_to_snake(resource))
 
 class SwaggerView(Resource):
-    """The :class:`Resource` used for the '/swagger.json' route
+    """The :class:`Resource` used for the '/openapi.json' route
 
     It also uses CORS to set the Access-Control-Allow-Origin header to "*" for this route so that the
-    swagger.json can be accessible from other domains.
+    openapi.json can be accessible from other domains.
 
-    .. todo:: Allow customizing the origin for CORS on the swagger.json
+    .. todo:: Allow customizing the origin for CORS on the openapi.json
     """
-    def __init__(self, api: SwagGen) -> None:
+    def __init__(self, api: Pint) -> None:
         """Construct the SwaggerView
 
-        :param api: will be an instance of a :class:`SwagGen` object, the :attr:`~SwagGen.__schema__`
-                    property will be returned for `get` requests to '/swagger.json'
+        :param api: will be an instance of a :class:`Pint` object, the :attr:`~Pint.__schema__`
+                    property will be returned for `get` requests to '/openapi.json'
         """
         self.api = api
 
-    # use CORS to allow other origins to access the swagger.json route
+    # use CORS to allow other origins to access the openapi.json route
     # this way it can also be used with swagger UI
     @crossdomain(origin='*')
     async def get(self):

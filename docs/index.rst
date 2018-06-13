@@ -1,11 +1,11 @@
-.. SwagGen documentation master file, created by
+.. Quart-OpenAPI documentation master file, created by
    sphinx-quickstart on Fri Mar 23 11:03:18 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. title:: SwagGen
+.. title:: Quart OpenAPI
 
-Documentation for factset.swaggen!
+Documentation for factset.quart_openapi!
 ==================================
 
 .. include:: ../README.rst

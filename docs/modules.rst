@@ -1,9 +1,9 @@
-swaggen
-=======
+factset.quart_openapi
+=====================
 
 .. toctree::
    :maxdepth: 4
 
-   swaggen
+   pint
    resource
    swagger
