@@ -3,7 +3,7 @@
 Resource Class
 ==============
 
-.. currentmodule:: factset.quart_openapi
+.. currentmodule:: quart_openapi
 
 .. autoclass:: Resource
    :members:

@@ -6,17 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>factset.quart_openapi.pint &#8212; Quart-OpenApi 1.3.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
+    <title>quart_openapi.pint &#8212; Quart-OpenApi 1.3.4 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
    
-  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -26,7 +26,7 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">Quart-OpenApi</a></h1>
+<h1 class="logo"><a href="../../index.html">Quart-OpenApi</a></h1>
 
 
 
@@ -46,13 +46,13 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">quart_openapi</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../pint.html">Pint Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../pint.html#swaggerview-helper">SwaggerView helper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">quart_openapi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pint.html">Pint Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pint.html#swaggerview-helper">SwaggerView helper</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../resource.html">Resource Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../swagger.html">Swagger Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../resource.html">Resource Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../swagger.html">Swagger Class</a></li>
 </ul>
 </li>
 </ul>
@@ -68,7 +68,7 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -83,7 +83,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for factset.quart_openapi.pint</h1><div class="highlight"><pre>
+  <h1>Source code for quart_openapi.pint</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">quart</span> <span class="k">import</span> <span class="n">Quart</span><span class="p">,</span> <span class="n">jsonify</span>
 <span class="kn">from</span> <span class="nn">quart.views</span> <span class="k">import</span> <span class="n">http_method_funcs</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -120,7 +120,7 @@
 <span class="sd">    route.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Pint.__init__"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Pint.__init__"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">contact_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contact_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">base_model_schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">RefResolver</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -165,7 +165,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="s1">&#39;openapi.json&#39;</span><span class="p">,</span> <span class="n">SwaggerView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="s1">&#39;swaggerview&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;OPTIONS&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_error_handler</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_json_validation_exc</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pint.handle_json_validation_exc"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.handle_json_validation_exc">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Pint.handle_json_validation_exc"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.handle_json_validation_exc">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">handle_json_validation_exc</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">ValidationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;Function to handle validation errors</span>
 
@@ -213,7 +213,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span> <span class="o">=</span> <span class="n">Swagger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span>
 
-<div class="viewcode-block" id="Pint.get_validator"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.get_validator">[docs]</a>    <span class="k">def</span> <span class="nf">get_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Draft4Validator</span><span class="p">]:</span>
+<div class="viewcode-block" id="Pint.get_validator"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.get_validator">[docs]</a>    <span class="k">def</span> <span class="nf">get_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Draft4Validator</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Get a specific :class:`~jsonschema.Draft4Validator` instance by name</span>
 
 <span class="sd">        :param name: The validator name to lookup</span>
@@ -242,7 +242,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">resource</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">view_func</span><span class="p">,</span> <span class="n">methods</span><span class="p">,</span> <span class="n">provide_automatic_options</span><span class="o">=</span><span class="n">provide_automatic_options</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Pint.param"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.param">[docs]</a>    <span class="k">def</span> <span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Pint.param"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.param">[docs]</a>    <span class="k">def</span> <span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">_in</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Decorator for describing parameters for a given resource or specific request method.</span>
 
@@ -282,7 +282,7 @@
         <span class="n">param</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">param</span><span class="p">})</span></div>
 
-<div class="viewcode-block" id="Pint.response"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.response">[docs]</a>    <span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="p">:</span> <span class="n">ValidatorTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Pint.response"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.response">[docs]</a>    <span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="p">:</span> <span class="n">ValidatorTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Decorator for documenting the response from a route</span>
 
@@ -310,7 +310,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="n">code</span><span class="p">:</span> <span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)})</span></div>
 
-<div class="viewcode-block" id="Pint.route"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.route">[docs]</a>    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<div class="viewcode-block" id="Pint.route"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.route">[docs]</a>    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Decorator for establishing routes</span>
 
 <span class="sd">        :param path: the path to route on, should start with a `/`, may contain params converters</span>
@@ -330,7 +330,7 @@
             <span class="k">return</span> <span class="n">func_or_viewcls</span>
         <span class="k">return</span> <span class="n">decorator</span></div>
 
-<div class="viewcode-block" id="Pint.create_ref_validator"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.create_ref_validator">[docs]</a>    <span class="k">def</span> <span class="nf">create_ref_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draft4Validator</span><span class="p">:</span>
+<div class="viewcode-block" id="Pint.create_ref_validator"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.create_ref_validator">[docs]</a>    <span class="k">def</span> <span class="nf">create_ref_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draft4Validator</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Use the :attr:`base_model` to resolve the component category and name and create a</span>
 <span class="sd">        :class:`~jsonschema.Draft4Validator`</span>
 
@@ -351,7 +351,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_validators</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">validator</span>
         <span class="k">return</span> <span class="n">validator</span></div>
 
-<div class="viewcode-block" id="Pint.create_validator"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.create_validator">[docs]</a>    <span class="k">def</span> <span class="nf">create_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Draft4Validator</span><span class="p">:</span>
+<div class="viewcode-block" id="Pint.create_validator"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.create_validator">[docs]</a>    <span class="k">def</span> <span class="nf">create_validator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Draft4Validator</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Create a validator from a schema</span>
 
 <span class="sd">        :param name: The name of this validator</span>
@@ -382,7 +382,7 @@
                     <span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">__apidoc__</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__apidoc__&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">doc</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Pint.doc"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.doc">[docs]</a>    <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<div class="viewcode-block" id="Pint.doc"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.doc">[docs]</a>    <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generic decorator for adding docs via keys pointing to dictionaries</span>
 
 <span class="sd">        Examples:</span>
@@ -408,7 +408,7 @@
             <span class="k">return</span> <span class="n">documented</span>
         <span class="k">return</span> <span class="n">wrapper</span></div>
 
-<div class="viewcode-block" id="Pint.expect"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.expect">[docs]</a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">:</span> <span class="n">ExpectedDescList</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<div class="viewcode-block" id="Pint.expect"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.expect">[docs]</a>    <span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">:</span> <span class="n">ExpectedDescList</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Define the expected request schema</span>
 
 <span class="sd">        :param \*inputs: one or more inputs that are either a validator or a tuple of the form</span>
@@ -484,7 +484,7 @@
             <span class="n">expect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pint.default_id"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.Pint.default_id">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Pint.default_id"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.default_id">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">default_id</span><span class="p">(</span><span class="n">resource</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;function for creating a default operation id from a resource and method</span>
 
@@ -494,7 +494,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">_</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">camel_to_snake</span><span class="p">(</span><span class="n">resource</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SwaggerView"><a class="viewcode-back" href="../../../pint.html#factset.quart_openapi.SwaggerView">[docs]</a><span class="k">class</span> <span class="nc">SwaggerView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="SwaggerView"><a class="viewcode-back" href="../../pint.html#quart_openapi.SwaggerView">[docs]</a><span class="k">class</span> <span class="nc">SwaggerView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The :class:`Resource` used for the &#39;/openapi.json&#39; route</span>
 
 <span class="sd">    It also uses CORS to set the Access-Control-Allow-Origin header to &quot;*&quot; for this route so that the</span>

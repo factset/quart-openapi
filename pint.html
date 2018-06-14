@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Resource Class" href="resource.html" />
-    <link rel="prev" title="factset.quart_openapi" href="modules.html" />
+    <link rel="prev" title="quart_openapi" href="modules.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,13 +37,18 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=factset&repo=quart-openapi&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
 
 
 
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">factset.quart_openapi</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">quart_openapi</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Pint Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#swaggerview-helper">SwaggerView helper</a></li>
 </ul>
@@ -83,8 +88,8 @@
   <div class="section" id="pint-class">
 <span id="pint"></span><h1>Pint Class<a class="headerlink" href="#pint-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="factset.quart_openapi.Pint">
-<em class="property">class </em><code class="descclassname">factset.quart_openapi.</code><code class="descname">Pint</code><span class="sig-paren">(</span><em>*args</em>, <em>title=None</em>, <em>contact=None</em>, <em>contact_url=None</em>, <em>contact_email=None</em>, <em>version='1.0'</em>, <em>description=None</em>, <em>validate=True</em>, <em>base_model_schema=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#factset.quart_openapi.Pint" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint">
+<em class="property">class </em><code class="descclassname">quart_openapi.</code><code class="descname">Pint</code><span class="sig-paren">(</span><em>*args</em>, <em>title=None</em>, <em>contact=None</em>, <em>contact_url=None</em>, <em>contact_email=None</em>, <em>version='1.0'</em>, <em>description=None</em>, <em>validate=True</em>, <em>base_model_schema=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#quart_openapi.Pint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://pgjones.gitlab.io/quart/source/quart.app.html#quart.app.Quart" title="(in Quart v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">quart.app.Quart</span></code></a></p>
 <p>Use this instead of instantiating <a class="reference external" href="https://pgjones.gitlab.io/quart/source/quart.html#quart.Quart" title="(in Quart v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">quart.Quart</span></code></a></p>
 <p>This takes the place of instantiating a <a class="reference external" href="https://pgjones.gitlab.io/quart/source/quart.html#quart.Quart" title="(in Quart v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">quart.Quart</span></code></a> instance. It will forward
@@ -92,8 +97,8 @@ any init arguments to Quart and takes arguments to fill out the metadata for the
 documentation it generates that will automatically be accessible via the ‘/openapi.json’
 route.</p>
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>title=None</em>, <em>contact=None</em>, <em>contact_url=None</em>, <em>contact_email=None</em>, <em>version='1.0'</em>, <em>description=None</em>, <em>validate=True</em>, <em>base_model_schema=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>title=None</em>, <em>contact=None</em>, <em>contact_url=None</em>, <em>contact_email=None</em>, <em>version='1.0'</em>, <em>description=None</em>, <em>validate=True</em>, <em>base_model_schema=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a Pint</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -123,10 +128,10 @@ constructor.</li>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="factset.quart_openapi.Pint.base_model">
-<code class="descname">base_model</code><a class="headerlink" href="#factset.quart_openapi.Pint.base_model" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.base_model">
+<code class="descname">base_model</code><a class="headerlink" href="#quart_openapi.Pint.base_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/references/#jsonschema.RefResolver" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RefResolver</span></code></a> created by processing the file or schema that was passed to
-<a class="reference internal" href="#factset.quart_openapi.Pint.__init__" title="factset.quart_openapi.Pint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a></p>
+<a class="reference internal" href="#quart_openapi.Pint.__init__" title="quart_openapi.Pint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -138,9 +143,9 @@ constructor.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.create_ref_validator">
-<code class="descname">create_ref_validator</code><span class="sig-paren">(</span><em>name</em>, <em>category</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.create_ref_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.create_ref_validator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the <a class="reference internal" href="#factset.quart_openapi.Pint.base_model" title="factset.quart_openapi.Pint.base_model"><code class="xref py py-attr docutils literal notranslate"><span class="pre">base_model</span></code></a> to resolve the component category and name and create a
+<dt id="quart_openapi.Pint.create_ref_validator">
+<code class="descname">create_ref_validator</code><span class="sig-paren">(</span><em>name</em>, <em>category</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.create_ref_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.create_ref_validator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the <a class="reference internal" href="#quart_openapi.Pint.base_model" title="quart_openapi.Pint.base_model"><code class="xref py py-attr docutils literal notranslate"><span class="pre">base_model</span></code></a> to resolve the component category and name and create a
 <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -160,13 +165,13 @@ constructor.</li>
 </tr>
 </tbody>
 </table>
-<p>The resulting validator can be passed into decorators like <a class="reference internal" href="#factset.quart_openapi.Pint.param" title="factset.quart_openapi.Pint.param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">param()</span></code></a> or <a class="reference internal" href="#factset.quart_openapi.Pint.response" title="factset.quart_openapi.Pint.response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">response()</span></code></a>
-and will be used to create the schema in the openapi json output or passed into <a class="reference internal" href="#factset.quart_openapi.Pint.expect" title="factset.quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a>
+<p>The resulting validator can be passed into decorators like <a class="reference internal" href="#quart_openapi.Pint.param" title="quart_openapi.Pint.param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">param()</span></code></a> or <a class="reference internal" href="#quart_openapi.Pint.response" title="quart_openapi.Pint.response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">response()</span></code></a>
+and will be used to create the schema in the openapi json output or passed into <a class="reference internal" href="#quart_openapi.Pint.expect" title="quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a>
 to use it for actually validating a request against the schema. It will be output as a ‘$ref’
 object in the resulting openapi json output.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">The <a class="reference internal" href="#factset.quart_openapi.Pint.expect" title="factset.quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a> decorator</p>
+<p class="last">The <a class="reference internal" href="#quart_openapi.Pint.expect" title="quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a> decorator</p>
 </div>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
@@ -175,8 +180,8 @@ object in the resulting openapi json output.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.create_validator">
-<code class="descname">create_validator</code><span class="sig-paren">(</span><em>name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.create_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.create_validator" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.create_validator">
+<code class="descname">create_validator</code><span class="sig-paren">(</span><em>name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.create_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.create_validator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a validator from a schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -196,7 +201,7 @@ object in the resulting openapi json output.</p>
 </tr>
 </tbody>
 </table>
-<p>You can use references to models that are in the <a class="reference internal" href="#factset.quart_openapi.Pint.base_model" title="factset.quart_openapi.Pint.base_model"><code class="xref py py-attr docutils literal notranslate"><span class="pre">base_model</span></code></a> as that will be used to resolve
+<p>You can use references to models that are in the <a class="reference internal" href="#quart_openapi.Pint.base_model" title="quart_openapi.Pint.base_model"><code class="xref py py-attr docutils literal notranslate"><span class="pre">base_model</span></code></a> as that will be used to resolve
 any references such as <cite>#/components/requestBodies/sample</cite>.</p>
 <div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
@@ -204,13 +209,13 @@ any references such as <cite>#/components/requestBodies/sample</cite>.</p>
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">The <a class="reference internal" href="#factset.quart_openapi.Pint.expect" title="factset.quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a> decorator</p>
+<p class="last">The <a class="reference internal" href="#quart_openapi.Pint.expect" title="quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">expect()</span></code></a> decorator</p>
 </div>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="factset.quart_openapi.Pint.default_id">
-<em class="property">static </em><code class="descname">default_id</code><span class="sig-paren">(</span><em>resource</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.default_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.default_id" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.default_id">
+<em class="property">static </em><code class="descname">default_id</code><span class="sig-paren">(</span><em>resource</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.default_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.default_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>function for creating a default operation id from a resource and method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -233,8 +238,8 @@ any references such as <cite>#/components/requestBodies/sample</cite>.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.doc">
-<code class="descname">doc</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.doc" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.doc">
+<code class="descname">doc</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic decorator for adding docs via keys pointing to dictionaries</p>
 <p>Examples:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&lt;string:table&gt;&#39;</span><span class="p">)</span>
@@ -262,8 +267,8 @@ any references such as <cite>#/components/requestBodies/sample</cite>.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.expect">
-<code class="descname">expect</code><span class="sig-paren">(</span><em>*inputs</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.expect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.expect" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.expect">
+<code class="descname">expect</code><span class="sig-paren">(</span><em>*inputs</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.expect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.expect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the expected request schema</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -274,7 +279,7 @@ any references such as <cite>#/components/requestBodies/sample</cite>.</p>
 Tuple[validator, content_type, Dict of properties]. properly handles either
 1, 2, or all 3 members existing.</li>
 <li><strong>**kwargs</strong> – currently only recognizes ‘validate’ as a keyword arg which can override the
-bool that was passed into <a class="reference internal" href="#factset.quart_openapi.Pint.__init__" title="factset.quart_openapi.Pint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> to turn validation on or off for this
+bool that was passed into <a class="reference internal" href="#quart_openapi.Pint.__init__" title="quart_openapi.Pint.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a> to turn validation on or off for this
 particular request body</li>
 </ul>
 </td>
@@ -345,8 +350,8 @@ the <cite>kwargs</cite></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.get_validator">
-<code class="descname">get_validator</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.get_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.get_validator" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.get_validator">
+<code class="descname">get_validator</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.get_validator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.get_validator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a specific <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a> instance by name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -363,8 +368,8 @@ the <cite>kwargs</cite></p>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="factset.quart_openapi.Pint.handle_json_validation_exc">
-<em class="property">static </em><code class="descname">handle_json_validation_exc</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.handle_json_validation_exc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.handle_json_validation_exc" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.handle_json_validation_exc">
+<em class="property">static </em><code class="descname">handle_json_validation_exc</code><span class="sig-paren">(</span><em>error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.handle_json_validation_exc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.handle_json_validation_exc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to handle validation errors</p>
 <p>The constructor will register this function to handle a <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/errors/#jsonschema.exceptions.ValidationError" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValidationError</span></code></a>
 which is thrown by the <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/#module-jsonschema" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jsonschema</span></code></a> validation routines.</p>
@@ -390,8 +395,8 @@ which is thrown by the <a class="reference external" href="https://python-jsonsc
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.param">
-<code class="descname">param</code><span class="sig-paren">(</span><em>name</em>, <em>description=None</em>, <em>_in='query'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.param" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.param">
+<code class="descname">param</code><span class="sig-paren">(</span><em>name</em>, <em>description=None</em>, <em>_in='query'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for describing parameters for a given resource or specific request method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -408,7 +413,7 @@ which is thrown by the <a class="reference external" href="https://python-jsonsc
 </tbody>
 </table>
 <p>If put at the class level, it’ll add the parameter to all method types. For path params
-you should use <a class="reference internal" href="#factset.quart_openapi.Pint.doc" title="factset.quart_openapi.Pint.doc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">doc()</span></code></a> instead which will automatically handle path params instead of
+you should use <a class="reference internal" href="#quart_openapi.Pint.doc" title="quart_openapi.Pint.doc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">doc()</span></code></a> instead which will automatically handle path params instead of
 having to manually set <cite>_in</cite> to ‘path’</p>
 <p>See the following example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/header&#39;</span><span class="p">)</span>
@@ -441,23 +446,23 @@ having to manually set <cite>_in</cite> to ‘path’</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="factset.quart_openapi.Pint.resources">
-<code class="descname">resources</code><a class="headerlink" href="#factset.quart_openapi.Pint.resources" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.resources">
+<code class="descname">resources</code><a class="headerlink" href="#quart_openapi.Pint.resources" title="Permalink to this definition">¶</a></dt>
 <dd><p>The list of resource tuples that have been added so far.</p>
 <p>The tuple contains the object itself, the path and the list of methods it supports</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]]</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.response">
-<code class="descname">response</code><span class="sig-paren">(</span><em>code</em>, <em>description</em>, <em>validator=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.response" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.response">
+<code class="descname">response</code><span class="sig-paren">(</span><em>code</em>, <em>description</em>, <em>validator=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for documenting the response from a route</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -467,8 +472,8 @@ having to manually set <cite>_in</cite> to ‘path’</p>
 <li><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/http.html#http.HTTPStatus" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus</span></code></a>) – The HTTP Response code for this response</li>
 <li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The description property for this response</li>
 <li><strong>validator</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">_Forwardref</span></code>]]], <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – pass a string to refer to a specific validator by name, a
-<a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a> instance such as from <a class="reference internal" href="#factset.quart_openapi.Pint.get_validator" title="factset.quart_openapi.Pint.get_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_validator()</span></code></a>,
-<a class="reference internal" href="#factset.quart_openapi.Pint.create_ref_validator" title="factset.quart_openapi.Pint.create_ref_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_ref_validator()</span></code></a> or <a class="reference internal" href="#factset.quart_openapi.Pint.create_validator" title="factset.quart_openapi.Pint.create_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_validator()</span></code></a>, a jsonschema dict,
+<a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v2.6.1.dev237+g9632422)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a> instance such as from <a class="reference internal" href="#quart_openapi.Pint.get_validator" title="quart_openapi.Pint.get_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_validator()</span></code></a>,
+<a class="reference internal" href="#quart_openapi.Pint.create_ref_validator" title="quart_openapi.Pint.create_ref_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_ref_validator()</span></code></a> or <a class="reference internal" href="#quart_openapi.Pint.create_validator" title="quart_openapi.Pint.create_validator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_validator()</span></code></a>, a jsonschema dict,
 or the actual expected type of the response if a primitive</li>
 <li><strong>**kwargs</strong> – All other keyword args will be forwarded as properties of the response object</li>
 </ul>
@@ -499,8 +504,8 @@ responses.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Pint.route">
-<code class="descname">route</code><span class="sig-paren">(</span><em>path, methods=['GET'], *args, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#Pint.route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Pint.route" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Pint.route">
+<code class="descname">route</code><span class="sig-paren">(</span><em>path, methods=['GET'], *args, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#Pint.route"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Pint.route" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for establishing routes</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -536,10 +541,10 @@ should work identically to using the base method.</p>
 <div class="section" id="swaggerview-helper">
 <h2>SwaggerView helper<a class="headerlink" href="#swaggerview-helper" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="factset.quart_openapi.SwaggerView">
-<em class="property">class </em><code class="descclassname">factset.quart_openapi.</code><code class="descname">SwaggerView</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/pint.html#SwaggerView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.SwaggerView" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">factset.quart_openapi.Resource</span></code></a></p>
-<p>The <a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> used for the ‘/openapi.json’ route</p>
+<dt id="quart_openapi.SwaggerView">
+<em class="property">class </em><code class="descclassname">quart_openapi.</code><code class="descname">SwaggerView</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/pint.html#SwaggerView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.SwaggerView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">quart_openapi.Resource</span></code></a></p>
+<p>The <a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> used for the ‘/openapi.json’ route</p>
 <p>It also uses CORS to set the Access-Control-Allow-Origin header to “*” for this route so that the
 openapi.json can be accessible from other domains.</p>
 <div class="admonition-todo admonition" id="index-3">
@@ -547,8 +552,8 @@ openapi.json can be accessible from other domains.</p>
 <p class="last">Allow customizing the origin for CORS on the openapi.json</p>
 </div>
 <dl class="method">
-<dt id="factset.quart_openapi.SwaggerView.dispatch_request">
-<code class="descname">dispatch_request</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#factset.quart_openapi.SwaggerView.dispatch_request" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.SwaggerView.dispatch_request">
+<code class="descname">dispatch_request</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#quart_openapi.SwaggerView.dispatch_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Can be overridden instead of creating verb functions</p>
 <p>This will be called with the request view_args, i.e. any url parameters</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -562,10 +567,10 @@ openapi.json can be accessible from other domains.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.SwaggerView.validate_payload">
-<code class="descname">validate_payload</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#factset.quart_openapi.SwaggerView.validate_payload" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.SwaggerView.validate_payload">
+<code class="descname">validate_payload</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#quart_openapi.SwaggerView.validate_payload" title="Permalink to this definition">¶</a></dt>
 <dd><p>This will perform validation</p>
-<p>Will check the api docs of the class as set by using the decorators in <a class="reference internal" href="#factset.quart_openapi.Pint" title="factset.quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>
+<p>Will check the api docs of the class as set by using the decorators in <a class="reference internal" href="#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>
 and if an expect was present without <cite>validate</cite> set to <cite>False</cite> or <cite>None</cite>, it will
 attempt to validate any request against the schema if json, or ensure the content_type
 matches at least.</p>

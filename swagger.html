@@ -36,13 +36,18 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=factset&repo=quart-openapi&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
 
 
 
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">factset.quart_openapi</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">quart_openapi</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pint.html">Pint Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pint.html#swaggerview-helper">SwaggerView helper</a></li>
 </ul>
@@ -82,19 +87,19 @@
   <div class="section" id="swagger-class">
 <span id="swagger"></span><h1>Swagger Class<a class="headerlink" href="#swagger-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="factset.quart_openapi.Swagger">
-<em class="property">class </em><code class="descclassname">factset.quart_openapi.</code><code class="descname">Swagger</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="headerlink" href="#factset.quart_openapi.Swagger" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger">
+<em class="property">class </em><code class="descclassname">quart_openapi.</code><code class="descname">Swagger</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="headerlink" href="#quart_openapi.Swagger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for generating a openapi.json from the resources and information defined with
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></p>
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>api</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a Swagger object for generating the openapi Json</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api</strong> (<a class="reference internal" href="pint.html#factset.quart_openapi.Pint" title="factset.quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>) – the main app interface for getting the base model and resources</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api</strong> (<a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>) – the main app interface for getting the base model and resources</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
 </tr>
@@ -103,8 +108,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.as_dict">
-<code class="descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.as_dict" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.as_dict">
+<code class="descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dict which can be used with the <a class="reference external" href="https://docs.python.org/3.6/library/json.html#module-json" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a> module to return valid json</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,8 +122,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.description_for">
-<code class="descname">description_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.description_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.description_for" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.description_for">
+<code class="descname">description_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.description_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.description_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the description metadata and fallback on the whole docstring</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -141,8 +146,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.expected_params">
-<code class="descname">expected_params</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.expected_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.expected_params" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.expected_params">
+<code class="descname">expected_params</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.expected_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.expected_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference external" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#mediaTypeObject">Media Type object</a>
 for the expected request body.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -160,15 +165,15 @@ for the expected request body.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.extract_resource_doc">
-<code class="descname">extract_resource_doc</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.extract_resource_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.extract_resource_doc" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.extract_resource_doc">
+<code class="descname">extract_resource_doc</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.extract_resource_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.extract_resource_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the doc mapping for this resource that we saved on it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>resource</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Callable" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]) – The <a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> derived class or decorated view function</li>
+<li><strong>resource</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Callable" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]) – The <a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> derived class or decorated view function</li>
 <li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The route for this resource</li>
 </ul>
 </td>
@@ -186,8 +191,8 @@ a <cite>doc</cite> parameter</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.operation_id_for">
-<code class="descname">operation_id_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.operation_id_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.operation_id_for" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.operation_id_for">
+<code class="descname">operation_id_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.operation_id_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.operation_id_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the operation id to be used for openapi docs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -210,8 +215,8 @@ a <cite>doc</cite> parameter</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.parameters_for">
-<code class="descname">parameters_for</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.parameters_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.parameters_for" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.parameters_for">
+<code class="descname">parameters_for</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.parameters_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.parameters_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of param descriptions for output</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -228,8 +233,8 @@ a <cite>doc</cite> parameter</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.process_headers">
-<code class="descname">process_headers</code><span class="sig-paren">(</span><em>response</em>, <em>doc</em>, <em>method=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.process_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.process_headers" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.process_headers">
+<code class="descname">process_headers</code><span class="sig-paren">(</span><em>response</em>, <em>doc</em>, <em>method=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.process_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.process_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Properly form the header parameter objects according to the openapi 3.0 spec</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -255,8 +260,8 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.register_component">
-<code class="descname">register_component</code><span class="sig-paren">(</span><em>category</em>, <em>name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.register_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.register_component" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.register_component">
+<code class="descname">register_component</code><span class="sig-paren">(</span><em>category</em>, <em>name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.register_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.register_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used for populating the <a class="reference external" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject">components</a> section of the openapi docs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -277,8 +282,8 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.responses_for">
-<code class="descname">responses_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.responses_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.responses_for" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.responses_for">
+<code class="descname">responses_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.responses_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.responses_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Response dictionary for a given route and HTTP verb</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -301,8 +306,8 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.serialize_components">
-<code class="descname">serialize_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.serialize_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.serialize_components" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.serialize_components">
+<code class="descname">serialize_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.serialize_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.serialize_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the json for the <a class="reference external" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#componentsObject">components</a> section</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,8 +322,8 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.serialize_operation">
-<code class="descname">serialize_operation</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.serialize_operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.serialize_operation" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.serialize_operation">
+<code class="descname">serialize_operation</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.serialize_operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.serialize_operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize a single operation on the resource corresponding to a single HTTP verb</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -341,15 +346,15 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.serialize_resource">
-<code class="descname">serialize_resource</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em>, <em>methods</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.serialize_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.serialize_resource" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.serialize_resource">
+<code class="descname">serialize_resource</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em>, <em>methods</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.serialize_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.serialize_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use the docstring and any decorated info to create the resource object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>resource</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="resource.html#factset.quart_openapi.Resource" title="factset.quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Callable" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]) – the Resource object or view function</li>
+<li><strong>resource</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Callable" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]) – the Resource object or view function</li>
 <li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the route path for this resource</li>
 <li><strong>methods</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The list of available HTTP verbs for this route</li>
 </ul>
@@ -366,8 +371,8 @@ level, method level and any additional headers passed in</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Swagger.serialize_schema">
-<code class="descname">serialize_schema</code><span class="sig-paren">(</span><em>validator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/swagger.html#Swagger.serialize_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Swagger.serialize_schema" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Swagger.serialize_schema">
+<code class="descname">serialize_schema</code><span class="sig-paren">(</span><em>validator</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.serialize_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.serialize_schema" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a validator normalize the schema definition</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

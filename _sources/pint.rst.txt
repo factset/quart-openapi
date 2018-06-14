@@ -1,6 +1,6 @@
 .. _pint:
 
-.. currentmodule:: factset.quart_openapi
+.. currentmodule:: quart_openapi
 
 Pint Class
 =============

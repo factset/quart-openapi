@@ -37,13 +37,18 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=factset&repo=quart-openapi&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
 
 
 
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">factset.quart_openapi</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">quart_openapi</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pint.html">Pint Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pint.html#swaggerview-helper">SwaggerView helper</a></li>
 </ul>
@@ -83,12 +88,12 @@
   <div class="section" id="resource-class">
 <span id="resource"></span><h1>Resource Class<a class="headerlink" href="#resource-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="factset.quart_openapi.Resource">
-<em class="property">class </em><code class="descclassname">factset.quart_openapi.</code><code class="descname">Resource</code><a class="headerlink" href="#factset.quart_openapi.Resource" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Resource">
+<em class="property">class </em><code class="descclassname">quart_openapi.</code><code class="descname">Resource</code><a class="headerlink" href="#quart_openapi.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://pgjones.gitlab.io/quart/source/quart.views.html#quart.views.MethodView" title="(in Quart v0.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">quart.views.MethodView</span></code></a></p>
 <p>Inherit from this to create RESTful routes with openapi docs</p>
 <p>A Resource subclass needs only to implement async functions corresponding to the HTTP
-verbs you want to handle. Utilizing the decorators from <a class="reference internal" href="pint.html#factset.quart_openapi.Pint" title="factset.quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a> you can set
+verbs you want to handle. Utilizing the decorators from <a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a> you can set
 the route, params, responses, and so on that will show up in the openapi documentation.</p>
 <p>An example is,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">Pint</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">)</span>
@@ -99,11 +104,11 @@ the route, params, responses, and so on that will show up in the openapi documen
 </pre></div>
 </div>
 <p>That will enable a route ‘/&lt;id&gt;’ which will return the string “ID is &lt;id&gt;” when called
-by a GET request. If using <a class="reference internal" href="pint.html#factset.quart_openapi.Pint.expect" title="factset.quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Pint.expect()</span></code></a> to define the expected request body,
+by a GET request. If using <a class="reference internal" href="pint.html#quart_openapi.Pint.expect" title="quart_openapi.Pint.expect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Pint.expect()</span></code></a> to define the expected request body,
 it will perform validation unless validate is set to false.</p>
 <dl class="method">
-<dt id="factset.quart_openapi.Resource.dispatch_request">
-<code class="descname">dispatch_request</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/resource.html#Resource.dispatch_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Resource.dispatch_request" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Resource.dispatch_request">
+<code class="descname">dispatch_request</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/resource.html#Resource.dispatch_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Resource.dispatch_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Can be overridden instead of creating verb functions</p>
 <p>This will be called with the request view_args, i.e. any url parameters</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -117,10 +122,10 @@ it will perform validation unless validate is set to false.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="factset.quart_openapi.Resource.validate_payload">
-<code class="descname">validate_payload</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/factset/quart_openapi/resource.html#Resource.validate_payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#factset.quart_openapi.Resource.validate_payload" title="Permalink to this definition">¶</a></dt>
+<dt id="quart_openapi.Resource.validate_payload">
+<code class="descname">validate_payload</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/resource.html#Resource.validate_payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Resource.validate_payload" title="Permalink to this definition">¶</a></dt>
 <dd><p>This will perform validation</p>
-<p>Will check the api docs of the class as set by using the decorators in <a class="reference internal" href="pint.html#factset.quart_openapi.Pint" title="factset.quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>
+<p>Will check the api docs of the class as set by using the decorators in <a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>
 and if an expect was present without <cite>validate</cite> set to <cite>False</cite> or <cite>None</cite>, it will
 attempt to validate any request against the schema if json, or ensure the content_type
 matches at least.</p>
