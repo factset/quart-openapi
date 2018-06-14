@@ -46,7 +46,7 @@ long_description = '\n'.join((
     ''
 ))
 
-exec(compile(open('factset/quart_openapi/__about__.py').read(), 'factset/quart_openapi/__about__.py', 'exec'))
+exec(compile(open('quart_openapi/__about__.py').read(), 'quart_openapi/__about__.py', 'exec'))
 
 install_requires = pip('install')
 doc_require = pip('doc')
@@ -72,7 +72,7 @@ setup(
     url='https://github.com/factset/quart-openapi',
     author='Matt Topol',
     author_email='mtopol@factset.com',
-    packages=['factset.quart_openapi'],
+    packages=['quart_openapi'],
     include_package_data=True,
     install_requires=install_requires,
     setup_requires=setup_requires,

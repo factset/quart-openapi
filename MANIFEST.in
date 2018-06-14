@@ -1,5 +1,5 @@
 include README.rst MANIFEST.in
-recursive-include factset *
+recursive-include quart_openapi *
 recursive-include requirements *.pip
 
 global-exclude *.pyc

@@ -1,5 +1,5 @@
 import pytest
-from factset.quart_openapi import Pint, Resource
+from quart_openapi import Pint, Resource
 from jsonschema import RefResolver
 from quart import request, jsonify
 from http import HTTPStatus

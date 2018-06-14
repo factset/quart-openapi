@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath('../'))
 from jsonschema import RefResolver
 RefResolver.__module__ = 'jsonschema'
 
-from factset.quart_openapi import __short_version__, __release__, __description__
+from quart_openapi import __short_version__, __release__, __description__
 
 project = 'Quart-OpenApi'
 copyright = '2018, FactSet Research Systems, Inc.'
@@ -114,7 +114,7 @@ html_theme_options = {
     'sidebar_collapse': False,
     'github_user': 'factset',
     'github_repo': 'quart-openapi',
-    'github_button': False,
+    'github_button': True,
     'extra_nav_links': {
         'Index': 'genindex.html'
     }

@@ -22,14 +22,14 @@ You can install via pip
 
 .. code-block:: console
 
-    $ pip install factset.quart_openapi
+    $ pip install quart_openapi
 
 If you are developing the module and want to also be able to build the documentation, make sure
 to also install the dependencies from the extras 'doc' package like so:
 
 .. code-block:: console
 
-    $ pip install 'factset.quart_openapi[doc]'
+    $ pip install 'quart_openapi[doc]'
     $ python setup.py build_sphinx
 
 Quick Start
@@ -39,7 +39,7 @@ If you're familiar with Quart_ then the quick start doesn't change much:
 
 .. code-block:: python
 
-    from factset.quart_openapi import Pint, Resource
+    from quart_openapi import Pint, Resource
 
     app = Pint(__name__, title='Sample App')
 
@@ -65,7 +65,7 @@ This is equivalent to using the following with Quart_ as normal:
     async def hello():
       return "hello"
 
-Except that by using :class:`~factset.quart_openapi.Pint` and :class:`~factset.quart_openapi.Resource` it will also
+Except that by using :class:`~quart_openapi.Pint` and :class:`~quart_openapi.Resource` it will also
 add a route for '/openapi.json' which will contain the documentation of the route and use the docstring for the
 description.
 

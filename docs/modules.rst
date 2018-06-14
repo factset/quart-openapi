@@ -1,5 +1,5 @@
-factset.quart_openapi
-=====================
+quart_openapi
+=============
 
 .. toctree::
    :maxdepth: 4
