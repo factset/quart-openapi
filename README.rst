@@ -2,6 +2,8 @@
 Quart-OpenAPI
 =============
 
+Documentation can be found on https://factset.github.io/quart-openapi/
+
 .. inclusion-marker-do-not-remove
 
 Quart-OpenAPI is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
@@ -63,7 +65,7 @@ This is equivalent to using the following with Quart_ as normal:
     async def hello():
       return "hello"
 
-Except that by using :py:class:`~factset.quart_openapi.Pint` and :py:class:`~factset.quart_openapi.Resource` it will also
+Except that by using :class:`~factset.quart_openapi.Pint` and :class:`~factset.quart_openapi.Resource` it will also
 add a route for '/openapi.json' which will contain the documentation of the route and use the docstring for the
 description.
 
