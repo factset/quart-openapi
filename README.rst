@@ -22,14 +22,14 @@ You can install via pip
 
 .. code-block:: console
 
-    $ pip install quart_openapi
+    $ pip install quart-openapi
 
 If you are developing the module and want to also be able to build the documentation, make sure
 to also install the dependencies from the extras 'doc' package like so:
 
 .. code-block:: console
 
-    $ pip install 'quart_openapi[doc]'
+    $ pip install 'quart-openapi[doc]'
     $ python setup.py build_sphinx
 
 Quick Start
