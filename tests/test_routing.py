@@ -138,7 +138,8 @@ TEST_BASE_MODEL_SCHEMA = {
                     'age': {
                         'type': 'integer'
                     }
-                }
+                },
+                'required': ['name', 'age']
             }
         },
         'parameters': {
@@ -149,15 +150,17 @@ TEST_BASE_MODEL_SCHEMA = {
             }
         },
         'requestBodies': {
-            'content': {
-                'application/json': {
-                    'schema': {
-                        '$ref': '#/components/schemas/User'
-                    }
-                },
-                'application/xml': {
-                    'schema': {
-                        '$ref': '#/components/schemas/User'
+            'User': {
+                'content': {
+                    'application/json': {
+                        'schema': {
+                            '$ref': '#/components/schemas/User'
+                        }
+                    },
+                    'application/xml': {
+                        'schema': {
+                            '$ref': '#/components/schemas/User'
+                        }
                     }
                 }
             }
@@ -249,3 +252,42 @@ def test_base_model_ref_resolve():
 
     assert isinstance(app.base_model, RefResolver)
     assert app.base_model.base_uri == 'schema.json'
+
+@pytest.mark.asyncio
+async def test_post_validation():
+    app = Pint('test', base_model_schema=TEST_BASE_MODEL_SCHEMA)
+
+    test_ref = app.create_ref_validator('User', 'schemas')
+
+    @app.route('/testroute')
+    class TestReq(Resource):
+        @app.expect(test_ref)
+        async def post(self):
+            return jsonify(await request.get_json())
+
+    client = app.test_client()
+
+    # fail validation, missing required props
+    rv = await client.post('/testroute', json={});
+    assert rv.status_code == HTTPStatus.BAD_REQUEST
+    assert rv.headers['content-type'] == 'application/json'
+    data = await rv.get_json()
+    assert data['message'] == 'Request Body failed validation'
+    assert 'msg' in data['error'] and data['error']['msg']
+    assert 'value' in data['error']
+    assert 'schema' in data['error']
+
+    # fail validation, have required props, but age is wrong type
+    rv = await client.post('/testroute', json={'name': 'foobar', 'age': 'baz'})
+    assert rv.status_code == HTTPStatus.BAD_REQUEST
+    assert rv.headers['content-type'] == 'application/json'
+    data = await rv.get_json()
+    assert data['message'] == 'Request Body failed validation'
+    assert 'msg' in data['error'] and data['error']['msg']
+    assert 'value' in data['error']
+    assert 'schema' in data['error']
+
+    # succeed validation
+    rv = await client.post('/testroute', json={'name': 'foobar', 'age': 10})
+    assert rv.status_code == HTTPStatus.OK
+

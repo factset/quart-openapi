@@ -94,7 +94,8 @@ class Pint(Quart):
            :meth:`quart.Quart.register_error_handler`
                Registering error handlers with quart
         """
-        logger.error('request body validation failed, returning error')
+        logger.error('request body validation failed, returning error: msg: %s, instance: %r',
+                     error.message, error.instance)
         return jsonify({
             'message': 'Request Body failed validation',
             'error': {

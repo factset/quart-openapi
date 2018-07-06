@@ -392,12 +392,7 @@ class Swagger(object):
             validator, content_type, kwargs = get_expect_args(expect)
             if isinstance(validator, str):
                 validator = self.api.get_validator(validator)
-            elif isinstance(validator, Draft4Validator):
-                validator = validator
-            else:
-                validator = None
-
-            if validator is None:
+            elif not isinstance(validator, Draft4Validator):
                 continue
 
             schema = self.serialize_schema(validator)

@@ -2,7 +2,6 @@ from typing import Dict, Any, Tuple, Callable
 from quart import request
 from quart.views import MethodView
 from quart.typing import ResponseReturnValue
-from jsonschema.exceptions import ValidationError
 import logging
 from .typing import ValidatorTypes, ExpectedDescList
 
@@ -72,7 +71,6 @@ class Resource(MethodView):
         attempt to validate any request against the schema if json, or ensure the content_type
         matches at least.
         """
-        rval = True
         if getattr(func, '__apidoc__', False) is not False:
             doc = func.__apidoc__
             validate = doc.get('validate', None)
