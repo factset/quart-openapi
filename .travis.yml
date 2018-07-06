@@ -17,3 +17,13 @@ deploy:
   verbose: true
   on:
     branch: master
+
+deploy:
+  provider: pypi
+  user: zeroshade
+  password: $PYPI_TOKEN
+  distributions: "sdist bdist_wheel"
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
