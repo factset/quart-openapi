@@ -1,9 +1,12 @@
 language: python
 python:
   - "3.6"
-script: python3 setup.py test
 
-after_success: python3 setup.py build_sphinx
+install: python3 setup.py install
+script: python3 setup.py test
+after_success:
+  - pip install -r requirements/doc.pip
+  - python3 setup.py build_sphinx
 
 deploy:
   provider: pages
