@@ -1,5 +1,6 @@
-from quart import Quart, jsonify
+from quart import Quart, jsonify, Blueprint
 from quart.views import http_method_funcs
+from itertools import chain
 import json
 from jsonschema import Draft4Validator, RefResolver, FormatChecker
 from jsonschema.exceptions import ValidationError
@@ -25,13 +26,9 @@ def _expand_params_desc(data: Dict[str, Any]) -> None:
             if isinstance(description, str):
                 data['params'][name] = {'description': description}
 
-class Pint(Quart):
-    """Use this instead of instantiating :class:`quart.Quart`
-
-    This takes the place of instantiating a :class:`quart.Quart` instance. It will forward
-    any init arguments to Quart and takes arguments to fill out the metadata for the openapi
-    documentation it generates that will automatically be accessible via the '/openapi.json'
-    route.
+class BaseRest(object):
+    """Base object for handling the RESTful resources for routing and generating swagger. Used by :class:`Pint`
+    and :class:`PintBlueprint`
     """
 
     def __init__(self, *args: Any, title: Optional[str]=None, contact: Optional[str]=None,
@@ -39,7 +36,7 @@ class Pint(Quart):
                  version: str='1.0', description: Optional[str]=None, validate: bool=True,
                  base_model_schema: Optional[Union[str, Dict[str, Any], RefResolver]]=None,
                  **kwargs: Any) -> None:
-        r"""Construct a Pint
+        r"""Construct the Base Rest object
 
         :param \*args: non-keyword args for :class:`~quart.Quart`
         :param title: The title for the info section
@@ -66,7 +63,6 @@ class Pint(Quart):
         self.contact = contact
         self.contact_url = contact_url
         self.contact_email = contact_email
-        self.config['JSON_SORT_KEYS'] = False
         if base_model_schema is not None:
             if isinstance(base_model_schema, str):
                 with open(base_model_schema, 'r', encoding='utf-8') as f:
@@ -76,7 +72,6 @@ class Pint(Quart):
                 self._ref_resolver = RefResolver.from_schema(base_model_schema)
             elif isinstance(base_model_schema, RefResolver):
                 self._ref_resolver = base_model_schema
-        self.add_url_rule('/openapi.json', 'openapi.json', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
         self.register_error_handler(ValidationError, self.handle_json_validation_exc)
 
     @staticmethod
@@ -105,12 +100,6 @@ class Pint(Quart):
             }
         }), HTTPStatus.BAD_REQUEST.value
 
-    @property
-    def base_model(self) -> Optional[RefResolver]:
-        """The :class:`~jsonschema.RefResolver` created by processing the file or schema that was passed to
-        :meth:`__init__`
-        """
-        return self._ref_resolver
 
     @property
     def resources(self) -> Iterable[Tuple[Resource, str, Iterable[str]]]:
@@ -119,6 +108,13 @@ class Pint(Quart):
         The tuple contains the object itself, the path and the list of methods it supports
         """
         return self._resources
+
+    @property
+    def base_model(self) -> Optional[RefResolver]:
+        """The :class:`~jsonschema.RefResolver` created by processing the file or schema that was passed to
+        :meth:`__init__`
+        """
+        return self._ref_resolver
 
     @cached_property
     def __schema__(self) -> Dict[str, Union[str, Dict[str, Any]]]:
@@ -138,7 +134,7 @@ class Pint(Quart):
 
     def _add_resource(self, resource: Union[Resource, Callable],
                      path: str, methods: Iterable[str], endpoint: Optional[str]=None, *args,
-                     provide_automatic_options: bool=True) -> None:
+                      provide_automatic_options: bool=True, **kwargs: Any) -> None:
         r"""Called by :meth:`route` in order to process the resource or view function and only add it to the
         list of openapi resources if it's a class, allowing paths to be left out of the openapi documentation
         by declaring them as functions.
@@ -155,7 +151,8 @@ class Pint(Quart):
             view_func = resource.as_view(camel_to_snake(resource.__name__), *args)
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
-        self.add_url_rule(path, endpoint, view_func, methods, provide_automatic_options=provide_automatic_options)
+        super().add_url_rule(path, endpoint, view_func, methods,
+                          provide_automatic_options=provide_automatic_options, **kwargs)
 
     def param(self, name: str, description: Optional[str]=None,
               _in: str='query', **kwargs: Dict[str, Any]) -> Callable:
@@ -224,6 +221,12 @@ class Pint(Quart):
                   ...
         """
         return self.doc(responses={code: (description, validator, kwargs)})
+
+    def add_url_rule(self, path: str, endpoint: Optional[str]=None,
+                     view_func_or_cls: Union[Resource, Callable]=None, methods: Iterable[str]=['GET'],
+                     *args, **kwargs) -> None:
+        print(path, endpoint, view_func_or_cls, methods, args, kwargs)
+        self._add_resource(view_func_or_cls, path, methods, endpoint, *args, **kwargs)
 
     def route(self, path: str, methods: Iterable[str]=['GET'], *args, **kwargs) -> Callable:
         r"""Decorator for establishing routes
@@ -408,6 +411,36 @@ class Pint(Quart):
         :return: the id converting camel case to snake_case
         """
         return '{0}_{1}'.format(method, camel_to_snake(resource))
+
+class Pint(BaseRest, Quart):
+    """Use this instead of instantiating :class:`quart.Quart`
+
+    This takes the place of instantiating a :class:`quart.Quart` instance. It will forward
+    any init arguments to Quart and takes arguments to fill out the metadata for the openapi
+    documentation it generates that will automatically be accessible via the '/openapi.json'
+    route.
+    """
+
+    def __init__(self, *args, **kwargs) -> None:
+        """ Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs."""
+        super().__init__(*args, **kwargs)
+        self.config['JSON_SORT_KEYS'] = False
+        self.add_url_rule('/openapi.json', 'openapi', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
+
+class PintBlueprint(BaseRest, Blueprint):
+    """Use this instead of :class:`quart.Blueprint` objects to allow using Resource class objects with them"""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Will forward all arguments and keyword arguments to Blueprints"""
+        super().__init__(*args, **kwargs)
+
+    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str]=None) -> None:
+        """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
+        this blueprint, then call the parent register method
+        """
+        prefix = url_prefix or self.url_prefix
+        app._resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
+        super().register(app, first_registration, url_prefix=url_prefix)
 
 class SwaggerView(Resource):
     """The :class:`Resource` used for the '/openapi.json' route
