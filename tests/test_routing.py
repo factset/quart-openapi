@@ -1,14 +1,8 @@
 import pytest
 from quart_openapi import Pint, Resource
 from jsonschema import RefResolver
-from quart import request, jsonify
+from quart import request, jsonify, url_for
 from http import HTTPStatus
-
-@pytest.fixture
-def app():
-    app = Pint('test', title='App Test', contact='foo',
-                  contact_email='moo@bar.com', description='Sample Desc')
-    return app
 
 @pytest.mark.asyncio
 async def test_simple_app(app):
@@ -44,6 +38,19 @@ async def test_resource_get(app):
     assert rv.status_code == HTTPStatus.OK
     data = await rv.get_data()
     assert data.decode('utf-8') == "Got"
+
+@pytest.mark.asyncio
+async def test_app_url_for(app):
+    @app.route('/testing/')
+    class Tester(Resource):
+        async def get(self):
+            return 'Got'
+
+    async with app.test_request_context('GET', '/'):
+        openapi_url = url_for('openapi')
+        route_url = url_for('tester')
+        assert '/openapi.json' == openapi_url
+        assert '/testing/' == route_url
 
 @pytest.mark.asyncio
 async def test_resource_post(app):
