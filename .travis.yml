@@ -9,21 +9,19 @@ after_success:
   - python3 setup.py build_sphinx
 
 deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN # set in repo settings
-  keep-history: true
-  local-dir: docs/build/html
-  verbose: true
-  on:
-    branch: master
-
-deploy:
-  provider: pypi
-  user: zeroshade
-  password: $PYPI_TOKEN
-  distributions: "sdist bdist_wheel"
-  skip_cleanup: true
-  on:
-    branch: master
-    tags: true
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN # set in repo settings
+    keep-history: true
+    local-dir: docs/build/html
+    verbose: true
+    on:
+      branch: master
+  - provider: pypi
+    user: zeroshade
+    password: $PYPI_TOKEN
+    distributions: "sdist bdist_wheel"
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true
