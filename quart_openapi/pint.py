@@ -1,6 +1,5 @@
 from quart import Quart, jsonify, Blueprint
 from quart.views import http_method_funcs
-from itertools import chain
 import json
 from jsonschema import Draft4Validator, RefResolver, FormatChecker
 from jsonschema.exceptions import ValidationError
@@ -221,12 +220,6 @@ class BaseRest(object):
                   ...
         """
         return self.doc(responses={code: (description, validator, kwargs)})
-
-    def add_url_rule(self, path: str, endpoint: Optional[str]=None,
-                     view_func_or_cls: Union[Resource, Callable]=None, methods: Iterable[str]=['GET'],
-                     *args, **kwargs) -> None:
-        print(path, endpoint, view_func_or_cls, methods, args, kwargs)
-        self._add_resource(view_func_or_cls, path, methods, endpoint, *args, **kwargs)
 
     def route(self, path: str, methods: Iterable[str]=['GET'], *args, **kwargs) -> Callable:
         r"""Decorator for establishing routes
