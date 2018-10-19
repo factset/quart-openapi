@@ -39,7 +39,7 @@ class Pint(Quart):
                  version: str='1.0', description: Optional[str]=None, validate: bool=True,
                  base_model_schema: Optional[Union[str, Dict[str, Any], RefResolver]]=None,
                  **kwargs: Any) -> None:
-        """Construct a Pint
+        r"""Construct a Pint
 
         :param \*args: non-keyword args for :class:`~quart.Quart`
         :param title: The title for the info section
@@ -139,7 +139,7 @@ class Pint(Quart):
     def _add_resource(self, resource: Union[Resource, Callable],
                      path: str, methods: Iterable[str], endpoint: Optional[str]=None, *args,
                      provide_automatic_options: bool=True) -> None:
-        """Called by :meth:`route` in order to process the resource or view function and only add it to the
+        r"""Called by :meth:`route` in order to process the resource or view function and only add it to the
         list of openapi resources if it's a class, allowing paths to be left out of the openapi documentation
         by declaring them as functions.
 
@@ -159,7 +159,7 @@ class Pint(Quart):
 
     def param(self, name: str, description: Optional[str]=None,
               _in: str='query', **kwargs: Dict[str, Any]) -> Callable:
-        """Decorator for describing parameters for a given resource or specific request method.
+        r"""Decorator for describing parameters for a given resource or specific request method.
 
         :param name: Parameter name in documention
         :param description: the description property of the parameter object
@@ -199,7 +199,7 @@ class Pint(Quart):
 
     def response(self, code: HTTPStatus, description: str, validator: ValidatorTypes=None,
                  **kwargs: Dict[str, Any]) -> Callable:
-        """Decorator for documenting the response from a route
+        r"""Decorator for documenting the response from a route
 
         :param code: The HTTP Response code for this response
         :param description: The description property for this response
@@ -226,7 +226,7 @@ class Pint(Quart):
         return self.doc(responses={code: (description, validator, kwargs)})
 
     def route(self, path: str, methods: Iterable[str]=['GET'], *args, **kwargs) -> Callable:
-        """Decorator for establishing routes
+        r"""Decorator for establishing routes
 
         :param path: the path to route on, should start with a `/`, may contain params converters
         :param methods: list of HTTP verbs allowed to be routed
@@ -324,7 +324,7 @@ class Pint(Quart):
         return wrapper
 
     def expect(self, *inputs: ExpectedDescList, **kwargs: Dict[str, Any]) -> Callable:
-        """Define the expected request schema
+        r"""Define the expected request schema
 
         :param \*inputs: one or more inputs that are either a validator or a tuple of the form
                          Tuple[validator, content_type, Dict of properties]. properly handles either

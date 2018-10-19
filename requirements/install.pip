@@ -1,2 +1,2 @@
-jsonschema
+jsonschema == 2.6.0
 quart >= 0.5.0
