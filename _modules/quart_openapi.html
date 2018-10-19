@@ -6,10 +6,10 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>quart_openapi &#8212; Quart-OpenApi 1.3.6 documentation</title>
+    <title>quart_openapi &#8212; Quart-OpenApi 1.3.7 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -88,7 +88,7 @@
   <h1>Source code for quart_openapi</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">.resource</span> <span class="k">import</span> <span class="n">Resource</span>
-<span class="kn">from</span> <span class="nn">.pint</span> <span class="k">import</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">SwaggerView</span>
+<span class="kn">from</span> <span class="nn">.pint</span> <span class="k">import</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">SwaggerView</span><span class="p">,</span> <span class="n">PintBlueprint</span>
 <span class="kn">from</span> <span class="nn">.swagger</span> <span class="k">import</span> <span class="n">Swagger</span>
 <span class="kn">from</span> <span class="nn">.__about__</span> <span class="k">import</span> <span class="n">__short_version__</span><span class="p">,</span> <span class="n">__description__</span><span class="p">,</span> <span class="n">__release__</span>
 
@@ -96,6 +96,7 @@
 <span class="c1"># factset.quart_openapi instead of their individual files</span>
 <span class="n">Resource</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="vm">__name__</span>
 <span class="n">Pint</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="vm">__name__</span>
+<span class="n">PintBlueprint</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="vm">__name__</span>
 <span class="n">Swagger</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">=</span> <span class="vm">__name__</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -103,6 +104,7 @@
     <span class="s1">&#39;__description__&#39;</span><span class="p">,</span>
     <span class="s1">&#39;__release__&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Pint&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PintBlueprint&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Resource&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Swagger&#39;</span><span class="p">,</span>
     <span class="s1">&#39;SwaggerView&#39;</span>
@@ -119,8 +121,8 @@
       &copy;2018, FactSet Research Systems, Inc..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 
