@@ -431,7 +431,7 @@ class PintBlueprint(BaseRest, Blueprint):
         """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
         this blueprint, then call the parent register method
         """
-        prefix = url_prefix or self.url_prefix
+        prefix = url_prefix or self.url_prefix or ''
         app._resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
         super().register(app, first_registration, url_prefix=url_prefix)
 

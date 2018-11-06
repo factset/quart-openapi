@@ -135,3 +135,22 @@ async def test_openapi_with_blueprint(app: Pint) -> None:
 
     openapi = await response.get_json()
     assert len(openapi['paths'].keys()) == 2
+
+@pytest.mark.asyncio
+async def test_openapi_blueprint_noprefix(app: Pint) -> None:
+    blueprint = PintBlueprint('blueprint', __name__)
+
+    @blueprint.route('/')
+    class Testing(Resource):
+        async def get(self):
+            return 'GET'
+
+    app.register_blueprint(blueprint)
+
+    client = app.test_client()
+    response = await client.get('/openapi.json')
+    assert response.status_code == HTTPStatus.OK
+
+    openapi = await response.get_json()
+    assert openapi['paths'].get('/', None) is not None
+    assert openapi['paths']['/'].get('get', None) is not None
