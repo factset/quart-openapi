@@ -69,6 +69,25 @@ async def test_resource_post(app):
     assert data['extra'] == 'foobar'
 
 @pytest.mark.asyncio
+async def test_resource_default_route(app):
+    @app.route('/route', defaults={'testing': 'bar'})
+    @app.route('/route/<string:testing>')
+    class Tester(Resource):
+        async def get(self, testing):
+            return testing
+
+    client = app.test_client()
+    rv = await client.get('/route/foo')
+    assert rv.status_code == HTTPStatus.OK
+    data = await rv.get_data()
+    assert data == b'foo'
+
+    rv = await client.get('/route')
+    assert rv.status_code == HTTPStatus.OK
+    data = await rv.get_data()
+    assert data == b'bar'
+
+@pytest.mark.asyncio
 async def test_params(app):
     SWAGGER_RESP_OBJ = {
         'type': 'object',
