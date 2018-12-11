@@ -147,10 +147,12 @@ class BaseRest(object):
         """
         view_func = resource
         if isclass(resource):
-            view_func = getattr(resource, '_pint_view_wrapper', False)
+            # use the actual class name in the attr so that we don't break inheritance but still
+            # allow path overriding with defaults for parameter values
+            view_func = getattr(resource, f'_pint_{resource.__name__}_view_wrapper', False)
             if not view_func:
                 view_func = resource.as_view(camel_to_snake(resource.__name__), *args)
-                resource._pint_view_wrapper = view_func
+                setattr(resource, f'_pint_{resource.__name__}_view_wrapper', view_func)
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
         super().add_url_rule(path, endpoint, view_func, methods,
