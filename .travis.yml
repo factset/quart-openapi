@@ -18,8 +18,8 @@ deploy:
     on:
       branch: master
   - provider: pypi
-    user: zeroshade
-    password: $PYPI_TOKEN
+    user: $PIPY_USERNAME
+    password: $PYPI_PASSWORD
     distributions: "sdist bdist_wheel"
     skip_cleanup: true
     on:
