@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .resource import Resource
-from .pint import Pint, SwaggerView, PintBlueprint
+from .pint import Pint, OpenApiView, PintBlueprint
 from .swagger import Swagger
 from .__about__ import __short_version__, __description__, __release__
 
@@ -19,5 +19,5 @@ __all__ = [
     'PintBlueprint',
     'Resource',
     'Swagger',
-    'SwaggerView'
+    'OpenApiView'
 ]
