@@ -26,7 +26,7 @@ def _expand_params_desc(data: Dict[str, Any]) -> None:
                 data['params'][name] = {'description': description}
 
 class BaseRest(object):
-    """Base object for handling the RESTful resources for routing and generating swagger. Used by :class:`Pint`
+    """Base object for handling the RESTful resources for routing and generating openapi json. Used by :class:`Pint`
     and :class:`PintBlueprint`
     """
 
@@ -199,7 +199,7 @@ class BaseRest(object):
         return self.doc(params={name: param})
 
     def response(self, code: HTTPStatus, description: str, validator: ValidatorTypes=None,
-                 **kwargs: Dict[str, Any]) -> Callable:
+                 **kwargs: Any) -> Callable:
         r"""Decorator for documenting the response from a route
 
         :param code: The HTTP Response code for this response
@@ -419,11 +419,32 @@ class Pint(BaseRest, Quart):
     route.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        """ Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs."""
+    def __init__(self, *args, no_openapi: bool = False, **kwargs) -> None:
+        """Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.
+
+        :param \*args: non-keyword args passed to :class:`BaseRest`
+        :param no_openapi: set this to True to disable the auto creation of the /openapi.json route
+                           in order to allow custom manipulation of the route
+        :param \*\*kwargs: keyword args passed to :class:`BaseRest`
+
+        If you pass `no_openapi=True` then you can customize the openapi route by creating it yourself:
+
+        .. code-block:: python
+
+            app = Pint('Custom', no_openapi=True)
+
+            @app.route('/openapi.json')
+            # add other decorators if desired
+            async def openapi():
+              # add other logic if desired
+              return jsonify(app.__schema__)
+
+        """
         super().__init__(*args, **kwargs)
         self.config['JSON_SORT_KEYS'] = False
-        self.add_url_rule('/openapi.json', 'openapi', SwaggerView.as_view('swaggerview', self), ['GET', 'OPTIONS'])
+        if not no_openapi:
+            self.add_url_rule('/openapi.json', 'openapi',
+                              OpenApiView.as_view('openapi', self), ['GET', 'OPTIONS'])
 
 class PintBlueprint(BaseRest, Blueprint):
     """Use this instead of :class:`quart.Blueprint` objects to allow using Resource class objects with them"""
@@ -440,7 +461,7 @@ class PintBlueprint(BaseRest, Blueprint):
         app._resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
         super().register(app, first_registration, url_prefix=url_prefix)
 
-class SwaggerView(Resource):
+class OpenApiView(Resource):
     """The :class:`Resource` used for the '/openapi.json' route
 
     It also uses CORS to set the Access-Control-Allow-Origin header to "*" for this route so that the
@@ -449,7 +470,7 @@ class SwaggerView(Resource):
     .. todo:: Allow customizing the origin for CORS on the openapi.json
     """
     def __init__(self, api: Pint) -> None:
-        """Construct the SwaggerView
+        """Construct the OpenApiView
 
         :param api: will be an instance of a :class:`Pint` object, the :attr:`~Pint.__schema__`
                     property will be returned for `get` requests to '/openapi.json'
