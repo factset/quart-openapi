@@ -159,7 +159,7 @@ class BaseRest(object):
                           provide_automatic_options=provide_automatic_options, **kwargs)
 
     def param(self, name: str, description: Optional[str]=None,
-              _in: str='query', **kwargs: Dict[str, Any]) -> Callable:
+              _in: str='query', **kwargs: Any) -> Callable:
         r"""Decorator for describing parameters for a given resource or specific request method.
 
         :param name: Parameter name in documention
@@ -298,7 +298,7 @@ class BaseRest(object):
                     doc[http_method]['expect'] = [doc[http_method]['expect']]
         cls.__apidoc__ = merge(getattr(cls, '__apidoc__', {}), doc)
 
-    def doc(self, **kwargs: Dict[str, Any]) -> Callable:
+    def doc(self, **kwargs: Any) -> Callable:
         """Generic decorator for adding docs via keys pointing to dictionaries
 
         Examples:
