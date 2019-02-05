@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>quart_openapi.pint &#8212; Quart-OpenApi 1.4.2 documentation</title>
+    <title>quart_openapi.pint &#8212; Quart-OpenApi 1.4.3 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="../../_static/documentation_options.js"></script>
@@ -114,7 +114,7 @@
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
 
 <span class="k">class</span> <span class="nc">BaseRest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base object for handling the RESTful resources for routing and generating swagger. Used by :class:`Pint`</span>
+    <span class="sd">&quot;&quot;&quot;Base object for handling the RESTful resources for routing and generating openapi json. Used by :class:`Pint`</span>
 <span class="sd">    and :class:`PintBlueprint`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -247,7 +247,7 @@
                           <span class="n">provide_automatic_options</span><span class="o">=</span><span class="n">provide_automatic_options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">_in</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+              <span class="n">_in</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decorator for describing parameters for a given resource or specific request method.</span>
 
 <span class="sd">        :param name: Parameter name in documention</span>
@@ -287,7 +287,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">param</span><span class="p">})</span>
 
     <span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="p">:</span> <span class="n">ValidatorTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decorator for documenting the response from a route</span>
 
 <span class="sd">        :param code: The HTTP Response code for this response</span>
@@ -386,7 +386,7 @@
                     <span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]]</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">__apidoc__</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__apidoc__&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generic decorator for adding docs via keys pointing to dictionaries</span>
 
 <span class="sd">        Examples:</span>
@@ -507,11 +507,32 @@
 <span class="sd">    route.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Pint.__init__"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Pint.__init__"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">no_openapi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.</span>
+
+<span class="sd">        :param \*args: non-keyword args passed to :class:`BaseRest`</span>
+<span class="sd">        :param no_openapi: set this to True to disable the auto creation of the /openapi.json route</span>
+<span class="sd">                           in order to allow custom manipulation of the route</span>
+<span class="sd">        :param \*\*kwargs: keyword args passed to :class:`BaseRest`</span>
+
+<span class="sd">        If you pass `no_openapi=True` then you can customize the openapi route by creating it yourself:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            app = Pint(&#39;Custom&#39;, no_openapi=True)</span>
+
+<span class="sd">            @app.route(&#39;/openapi.json&#39;)</span>
+<span class="sd">            # add other decorators if desired</span>
+<span class="sd">            async def openapi():</span>
+<span class="sd">              # add other logic if desired</span>
+<span class="sd">              return jsonify(app.__schema__)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;JSON_SORT_KEYS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="s1">&#39;openapi&#39;</span><span class="p">,</span> <span class="n">SwaggerView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="s1">&#39;swaggerview&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;OPTIONS&#39;</span><span class="p">])</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">no_openapi</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="s1">&#39;openapi&#39;</span><span class="p">,</span>
+                              <span class="n">OpenApiView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="s1">&#39;openapi&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;OPTIONS&#39;</span><span class="p">])</span></div>
 
 <span class="k">class</span> <span class="nc">PintBlueprint</span><span class="p">(</span><span class="n">BaseRest</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use this instead of :class:`quart.Blueprint` objects to allow using Resource class objects with them&quot;&quot;&quot;</span>
@@ -528,7 +549,7 @@
         <span class="n">app</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">res</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{prefix}{path}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">])</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SwaggerView"><a class="viewcode-back" href="../../pint.html#quart_openapi.SwaggerView">[docs]</a><span class="k">class</span> <span class="nc">SwaggerView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">OpenApiView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The :class:`Resource` used for the &#39;/openapi.json&#39; route</span>
 
 <span class="sd">    It also uses CORS to set the Access-Control-Allow-Origin header to &quot;*&quot; for this route so that the</span>
@@ -537,7 +558,7 @@
 <span class="sd">    .. todo:: Allow customizing the origin for CORS on the openapi.json</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">Pint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Construct the SwaggerView</span>
+        <span class="sd">&quot;&quot;&quot;Construct the OpenApiView</span>
 
 <span class="sd">        :param api: will be an instance of a :class:`Pint` object, the :attr:`~Pint.__schema__`</span>
 <span class="sd">                    property will be returned for `get` requests to &#39;/openapi.json&#39;</span>
@@ -548,7 +569,7 @@
     <span class="c1"># this way it can also be used with swagger UI</span>
     <span class="nd">@crossdomain</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span></div>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span>
 </pre></div>
 
           </div>
