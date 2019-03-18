@@ -11,10 +11,10 @@ Pint Class
 
    .. automethod:: __init__
 
-SwaggerView helper
+OpenApiView helper
 ------------------
 
-.. autoclass:: SwaggerView
+.. autoclass:: OpenApiView
    :members:
    :inherited-members:
    :show-inheritance:
