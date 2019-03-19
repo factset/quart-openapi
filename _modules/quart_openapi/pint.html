@@ -47,8 +47,9 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">quart_openapi</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../pint.html">Pint Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../pint.html#swaggerview-helper">SwaggerView helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pint.html">Pint Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pint.html#pintblueprint-class">PintBlueprint Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../pint.html#openapiview-helper">OpenApiView helper</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../resource.html">Resource Class</a></li>
@@ -537,19 +538,19 @@
 <span class="k">class</span> <span class="nc">PintBlueprint</span><span class="p">(</span><span class="n">BaseRest</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use this instead of :class:`quart.Blueprint` objects to allow using Resource class objects with them&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PintBlueprint.__init__"><a class="viewcode-back" href="../../pint.html#quart_openapi.PintBlueprint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Will forward all arguments and keyword arguments to Blueprints&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PintBlueprint.register"><a class="viewcode-back" href="../../pint.html#quart_openapi.PintBlueprint.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering</span>
 <span class="sd">        this blueprint, then call the parent register method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">url_prefix</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
         <span class="n">app</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">res</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{prefix}{path}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">])</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">)</span></div>
 
-<span class="k">class</span> <span class="nc">OpenApiView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenApiView"><a class="viewcode-back" href="../../pint.html#quart_openapi.OpenApiView">[docs]</a><span class="k">class</span> <span class="nc">OpenApiView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The :class:`Resource` used for the &#39;/openapi.json&#39; route</span>
 
 <span class="sd">    It also uses CORS to set the Access-Control-Allow-Origin header to &quot;*&quot; for this route so that the</span>
@@ -569,7 +570,7 @@
     <span class="c1"># this way it can also be used with swagger UI</span>
     <span class="nd">@crossdomain</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span></div>
 </pre></div>
 
           </div>
