@@ -124,13 +124,14 @@ class Swagger(object):
         for resource, path, methods in self.api.resources:
             paths[extract_path(path)] = self.serialize_resource(resource, path, methods)
 
+        scheme = self.api.config.get('PREFERRED_URL_SCHEME',
+            'http' if not self.api.config.get('PREFER_SECURE_URLS', False) else 'https')
         spec = {
             'openapi': '3.0.0',
             'info': infos,
             'servers': [
                 {
-                    'url': ''.join([self.api.config['PREFERRED_URL_SCHEME'], '://',
-                                    self.api.config['SERVER_NAME'] or ''])
+                    'url': ''.join([scheme, '://', self.api.config['SERVER_NAME'] or ''])
                 }
             ],
             'paths': paths,
