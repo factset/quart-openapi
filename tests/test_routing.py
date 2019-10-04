@@ -1,8 +1,18 @@
 import pytest
+from packaging import version
 from quart_openapi import Pint, Resource
 from jsonschema import RefResolver
 from quart import request, jsonify, url_for
+from quart.__about__ import __version__ as quart_version
 from http import HTTPStatus
+
+QUART_VER_GT_09 = version.parse(quart_version) >= version.parse('0.9.0')
+
+def req_ctx(app: Pint, page: str, method: str=''):
+    if QUART_VER_GT_09:
+        return app.test_request_context(page, method=method)
+    else:
+        return app.test_request_context(method, page)
 
 @pytest.mark.asyncio
 async def test_simple_app(app):
@@ -46,7 +56,7 @@ async def test_app_url_for(app):
         async def get(self):
             return 'Got'
 
-    async with app.test_request_context('GET', '/'):
+    async with req_ctx(app, '/', method='GET'):
         openapi_url = url_for('openapi')
         route_url = url_for('tester')
         assert '/openapi.json' == openapi_url

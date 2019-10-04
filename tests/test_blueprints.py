@@ -1,8 +1,18 @@
 import pytest
+from packaging import version
 from http import HTTPStatus
 from quart_openapi import Pint, Resource, PintBlueprint
 from quart import Blueprint, url_for, request, ResponseReturnValue, abort
+from quart.__about__ import __version__ as quart_version
 from quart.views import MethodView
+
+QUART_VER_GT_09 = version.parse(quart_version) >= version.parse('0.9.0')
+
+def req_ctx(app: Pint, page: str, method: str=''):
+    if QUART_VER_GT_09:
+        return app.test_request_context(page, method=method)
+    else:
+        return app.test_request_context(method, page)
 
 @pytest.mark.asyncio
 async def test_root_endpoint_blueprint(app: Pint) -> None:
@@ -13,7 +23,7 @@ async def test_root_endpoint_blueprint(app: Pint) -> None:
         return 'OK'
 
     app.register_blueprint(blueprint)
-    async with app.test_request_context('GET', '/page/'):
+    async with req_ctx(app, '/page/', method='GET'):
         assert request.blueprint == 'blueprint'
         assert '/page/' == url_for('blueprint.route')
 
@@ -31,18 +41,18 @@ async def test_blueprint_url_prefix(app: Pint) -> None:
     app.register_blueprint(blueprint, url_prefix='/blueprint')
     app.register_blueprint(prefix)
 
-    async with app.test_request_context('GET', '/'):
+    async with req_ctx(app, '/', method='GET'):
         assert '/page/' == url_for('route')
         assert '/prefix/page/' == url_for('prefix.route')
         assert '/blueprint/page/' == url_for('blueprint.route')
 
-    async with app.test_request_context('GET', '/page/'):
+    async with req_ctx(app, '/page/', method='GET'):
         assert request.blueprint is None
 
-    async with app.test_request_context('GET', '/prefix/page/'):
+    async with req_ctx(app, '/prefix/page/', method='GET'):
         assert request.blueprint == 'prefix'
 
-    async with app.test_request_context('GET', '/blueprint/page/'):
+    async with req_ctx(app, '/blueprint/page/', method='GET'):
         assert request.blueprint == 'blueprint'
 
 
@@ -90,7 +100,7 @@ async def test_pint_blueprint_openapi(app: Pint) -> None:
     blueprint = PintBlueprint('blueprint', __name__, url_prefix='/blueprint')
     app.register_blueprint(blueprint)
 
-    async with app.test_request_context('GET', '/'):
+    async with req_ctx(app, '/', method='GET'):
         assert '/openapi.json' == url_for('openapi')
 
 
