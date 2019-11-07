@@ -7,7 +7,7 @@ from .pint import Pint
 from .resource import Resource, get_expect_args
 from .utils import parse_docstring, not_none, merge, extract_path
 from .typing import ValidatorTypes, HeaderType
-from typing import Dict, Any, Generator, Tuple, Union, Optional, Callable, Iterable, Mapping
+from typing import Dict, Any, Generator, Tuple, Union, Optional, Callable, Iterable, Mapping, List
 
 DEFAULT_RESPONSE_DESCRIPTION = 'Success'
 DEFAULT_RESPONSE = {'description': DEFAULT_RESPONSE_DESCRIPTION}
@@ -162,6 +162,19 @@ class Swagger(object):
             for name, schema in val.items():
                 self.register_component(category, name, schema)
         return OrderedDict((k, v) for k, v in self._components.items() if v)
+
+
+    def tags_for(self, doc: List[str]) -> Iterable[List[str]]:
+        """Get the list of tags for output
+
+        :param doc: a mapping from HTTP verb to the properties for serialization
+        :return: a list of string containing tags as described by the openapi 3.0 spec
+        """
+        tags = []
+        for name in doc['tags']:  
+            tags.append(name)
+        return tags
+
 
     def description_for(self, doc: Dict[str, Any], method: str) -> str:
         """Extract the description metadata and fallback on the whole docstring
@@ -333,7 +346,7 @@ class Swagger(object):
         operation = {
             'summary': doc[method]['docstring']['summary'],
             'description': self.description_for(doc, method),
-            'tags': [],
+            'tags': self.tags_for(doc[method]),
             'parameters': self.parameters_for(doc[method]) or None,
             'responses': self.responses_for(doc, method) or None,
             'operationId': self.operation_id_for(doc, method)
@@ -361,6 +374,8 @@ class Swagger(object):
         doc['name'] = resource.__name__
         params = merge(doc.get('params', OrderedDict()), _extract_path_params(path))
         doc['params'] = params
+        tags = doc.get('tags', list())
+        doc['tags'] = tags
         for method in [m.lower() for m in resource.methods or []]:
             method_doc = doc.get(method, OrderedDict())
             method_impl = getattr(resource, method)
@@ -374,6 +389,10 @@ class Swagger(object):
                 method_params = method_doc.get('params', {})
                 inherited_params = OrderedDict((k,v) for k, v in params.items())
                 method_doc['params'] = merge(inherited_params, method_params)
+                method_tags = method_doc.get('tags', [])
+                inherited_tags = sorted(list(tags))
+                method_doc['tags'] = merge(inherited_tags, method_tags)
+                
             doc[method] = method_doc
         return doc
 
