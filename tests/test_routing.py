@@ -6,6 +6,8 @@ from quart import request, jsonify, url_for
 from quart.__about__ import __version__ as quart_version
 from http import HTTPStatus
 
+# pylint: disable=unused-variable
+
 QUART_VER_GT_09 = version.parse(quart_version) >= version.parse('0.9.0')
 
 def req_ctx(app: Pint, page: str, method: str=''):
@@ -304,7 +306,7 @@ async def test_post_validation():
     client = app.test_client()
 
     # fail validation, missing required props
-    rv = await client.post('/testroute', json={});
+    rv = await client.post('/testroute', json={})
     assert rv.status_code == HTTPStatus.BAD_REQUEST
     assert rv.headers['content-type'] == 'application/json'
     data = await rv.get_json()

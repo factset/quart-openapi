@@ -1,7 +1,7 @@
 from quart.routing import ROUTE_VAR_RE, Map as RouteMap
 from jsonschema import Draft4Validator
 from itertools import chain
-from collections import OrderedDict, Hashable
+from collections import OrderedDict
 from http import HTTPStatus
 from .pint import Pint
 from .resource import Resource, get_expect_args
@@ -36,7 +36,7 @@ def _clean_header(header: HeaderType) -> Dict[str, Any]:
     if isinstance(header, str):
         header = {'description': header}
     typedef = header.get('type', 'string')
-    if isinstance(typedef, Hashable) and typedef in PY_TYPES:
+    if typedef in PY_TYPES:
         header['type'] = PY_TYPES[typedef]
     elif isinstance(typedef, (list, tuple)) and len(typedef) == 1 and typedef[0] in PY_TYPES:
         header['type'] = 'array'
@@ -171,7 +171,7 @@ class Swagger(object):
         :return: a list of string containing tags as described by the openapi 3.0 spec
         """
         tags = []
-        for name in doc['tags']:  
+        for name in doc['tags']:
             tags.append(name)
         return tags
 
@@ -392,7 +392,7 @@ class Swagger(object):
                 method_tags = method_doc.get('tags', [])
                 inherited_tags = sorted(list(tags))
                 method_doc['tags'] = merge(inherited_tags, method_tags)
-                
+
             doc[method] = method_doc
         return doc
 

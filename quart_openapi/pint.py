@@ -71,7 +71,7 @@ class BaseRest(object):
                 self._ref_resolver = RefResolver.from_schema(base_model_schema)
             elif isinstance(base_model_schema, RefResolver):
                 self._ref_resolver = base_model_schema
-        self.register_error_handler(ValidationError, self.handle_json_validation_exc)
+        self.register_error_handler(ValidationError, self.handle_json_validation_exc)  # pylint: disable=no-member
 
     @staticmethod
     def handle_json_validation_exc(error: ValidationError) -> Dict[str, Union[str, Dict[str, str]]]:
@@ -155,7 +155,7 @@ class BaseRest(object):
                 setattr(resource, f'_pint_{resource.__name__}_view_wrapper', view_func)
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
-        super().add_url_rule(path, endpoint, view_func, methods,
+        super().add_url_rule(path, endpoint, view_func, methods,  # pylint: disable=no-member
                           provide_automatic_options=provide_automatic_options, **kwargs)
 
     def param(self, name: str, description: Optional[str]=None,
@@ -420,7 +420,7 @@ class Pint(BaseRest, Quart):
     """
 
     def __init__(self, *args, no_openapi: bool = False, **kwargs) -> None:
-        """Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.
+        r"""Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.
 
         :param \*args: non-keyword args passed to :class:`BaseRest`
         :param no_openapi: set this to True to disable the auto creation of the /openapi.json route
