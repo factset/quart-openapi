@@ -159,7 +159,7 @@ async def test_params(app):
 
 TEST_BASE_MODEL_SCHEMA = {
     '$schema': 'http://json-schema.org/schema#',
-    'id': 'schema.json',
+    '$id': 'schema.json',
     'components': {
         'schemas': {
             'User': {
