@@ -1,11 +1,18 @@
-from datetime import timedelta
-from quart import make_response, request, current_app
-from functools import update_wrapper
-from typing import Iterable, Callable, Union
+"""cors.py
 
-def crossdomain(origin: str=None, methods: Iterable[str]=None, headers: Union[str, Iterable[str]]=None,
-                expose_headers: Union[str, Iterable[str]]=None, max_age: Union[int, timedelta]=21600,
-                attach_to_all=True, automatic_options=True, credentials=False) -> Callable:
+Provide decorator for CORS requests to provide the openapi.json file
+"""
+
+from datetime import timedelta
+from functools import update_wrapper
+from typing import Callable, Iterable, Union
+
+from quart import current_app, make_response, request
+
+# pylint: disable=too-many-arguments
+def crossdomain(origin: str = None, methods: Iterable[str] = None, headers: Union[str, Iterable[str]] = None,
+                expose_headers: Union[str, Iterable[str]] = None, max_age: Union[int, timedelta] = 21600,
+                attach_to_all: bool = True, automatic_options: bool = True, credentials: bool = False) -> Callable:
     """Decorator for `CORS <https://fetch.spec.whatwg.org/#http-cors-protocol>`_ adapted from
     http://flask.pocoo.org/snippets/56/
 
@@ -51,28 +58,28 @@ def crossdomain(origin: str=None, methods: Iterable[str]=None, headers: Union[st
         options_resp = await current_app.make_default_options_response()
         return options_resp.headers['allow']
 
-    def decorator(f):
+    def decorator(func):
         async def wrapped_function(*args, **kwargs):
             if automatic_options and request.method == 'OPTIONS':
                 resp = await current_app.make_default_options_response()
             else:
-                resp = await make_response(await f(*args, **kwargs))
+                resp = await make_response(await func(*args, **kwargs))
             if not attach_to_all and request.method != 'OPTIONS':
                 return resp
 
-            h = resp.headers
+            hdrs = resp.headers
 
-            h['Access-Control-Allow-Origin'] = origin
-            h['Access-Control-Allow-Methods'] = await get_methods()
-            h['Access-Control-Max-Age'] = str(max_age)
+            hdrs['Access-Control-Allow-Origin'] = origin
+            hdrs['Access-Control-Allow-Methods'] = await get_methods()
+            hdrs['Access-Control-Max-Age'] = str(max_age)
             if credentials:
-                h['Access-Control-Allow-Credentials'] = 'true'
+                hdrs['Access-Control-Allow-Credentials'] = 'true'
             if headers is not None:
-                h['Access-Control-Allow-Headers'] = headers
+                hdrs['Access-Control-Allow-Headers'] = headers
             if expose_headers is not None:
-                h['Access-Control-Expose-Headers'] = expose_headers
+                hdrs['Access-Control-Expose-Headers'] = expose_headers
             return resp
 
-        f.provide_automatic_options = False
-        return update_wrapper(wrapped_function, f)
+        func.provide_automatic_options = False
+        return update_wrapper(wrapped_function, func)
     return decorator

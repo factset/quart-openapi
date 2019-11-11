@@ -1,3 +1,4 @@
+# pylint: disable=missing-module-docstring
 # -*- coding: utf-8 -*-
 __short_version__ = '1.5'
 __release__ = '1.5.0'

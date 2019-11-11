@@ -1,18 +1,12 @@
-import pytest
-from packaging import version
-from quart_openapi import Pint, Resource
-from jsonschema import RefResolver
-from quart import request, jsonify, url_for
-from quart.__about__ import __version__ as quart_version
+# pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
 
-QUART_VER_GT_09 = version.parse(quart_version) >= version.parse('0.9.0')
+import pytest
+from jsonschema import RefResolver
+from quart import jsonify, request, url_for
+from quart_openapi import Pint, Resource
 
-def req_ctx(app: Pint, page: str, method: str=''):
-    if QUART_VER_GT_09:
-        return app.test_request_context(page, method=method)
-    else:
-        return app.test_request_context(method, page)
+# pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring,import-outside-toplevel
 
 @pytest.mark.asyncio
 async def test_simple_app(app):
@@ -50,7 +44,7 @@ async def test_resource_get(app):
     assert data.decode('utf-8') == "Got"
 
 @pytest.mark.asyncio
-async def test_app_url_for(app):
+async def test_app_url_for(app, req_ctx):
     @app.route('/testing/')
     class Tester(Resource):
         async def get(self):
@@ -68,7 +62,7 @@ async def test_resource_post(app):
     class Tester(Resource):
         async def post(self):
             data = await request.get_json()
-            return jsonify({ 'req': data, 'extra': 'foobar' })
+            return jsonify({'req': data, 'extra': 'foobar'})
 
     client = app.test_client()
     rv = await client.post('/testing', json={'moo': 'banana'})
@@ -99,13 +93,13 @@ async def test_resource_default_route(app):
 
 @pytest.mark.asyncio
 async def test_params(app):
-    SWAGGER_RESP_OBJ = {
+    swagger_resp_obj = {
         'type': 'object',
         'properties': {
-            'foobar': { 'type': 'string', 'description': 'the id' }
+            'foobar': {'type': 'string', 'description': 'the id'}
         }
     }
-    resp = app.create_validator('response', SWAGGER_RESP_OBJ)
+    resp = app.create_validator('response', swagger_resp_obj)
 
     @app.route('/<string:the_id>')
     @app.doc(params={'the_id': 'Test Id'})
@@ -143,14 +137,14 @@ async def test_params(app):
     param_doc = swag_path['get']['parameters'][0]
     assert param_doc['name'] == 'the_id'
     assert param_doc['in'] == 'path'
-    assert param_doc['required'] == True
+    assert param_doc['required']
     assert param_doc['schema'] == {'type': 'string'}
     assert param_doc['description'] == 'Test Id'
 
     resp_doc = swag_path['get']['responses']
     assert '200' in resp_doc
     assert resp_doc['200']['description'] == 'Success'
-    assert resp_doc['200']['content']['application/json']['schema'] == SWAGGER_RESP_OBJ
+    assert resp_doc['200']['content']['application/json']['schema'] == swagger_resp_obj
 
     rv = await client.get('/baz')
     assert rv.status_code == HTTPStatus.OK
@@ -207,8 +201,8 @@ TEST_BASE_MODEL_SCHEMA = {
 @pytest.mark.asyncio
 async def test_base_model_obj():
     app = Pint('test', title='App Test', contact='foo',
-                  contact_email='moo@bar.com', description='Sample Desc',
-                  base_model_schema=TEST_BASE_MODEL_SCHEMA)
+               contact_email='moo@bar.com', description='Sample Desc',
+               base_model_schema=TEST_BASE_MODEL_SCHEMA)
 
     @app.route('/testque')
     @app.param('test_que', ref='#/components/parameters/test_query')
@@ -256,8 +250,8 @@ async def test_base_model_obj():
 @pytest.mark.xfail
 async def test_required_query():
     app = Pint('test', title='App Test', contact='foo',
-                  contact_email='moo@bar.com', description='Sample Desc',
-                  base_model_schema=TEST_BASE_MODEL_SCHEMA)
+               contact_email='moo@bar.com', description='Sample Desc',
+               base_model_schema=TEST_BASE_MODEL_SCHEMA)
 
     test_que_ref = app.create_ref_validator('test_query', 'parameters')
 
@@ -304,7 +298,7 @@ async def test_post_validation():
     client = app.test_client()
 
     # fail validation, missing required props
-    rv = await client.post('/testroute', json={});
+    rv = await client.post('/testroute', json={})
     assert rv.status_code == HTTPStatus.BAD_REQUEST
     assert rv.headers['content-type'] == 'application/json'
     data = await rv.get_json()
@@ -326,4 +320,3 @@ async def test_post_validation():
     # succeed validation
     rv = await client.post('/testroute', json={'name': 'foobar', 'age': 10})
     assert rv.status_code == HTTPStatus.OK
-

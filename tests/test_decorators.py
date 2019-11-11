@@ -1,6 +1,10 @@
-import pytest
-from quart_openapi import Pint, Resource
+# pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
+
+import pytest
+from quart_openapi import Resource
+
+# pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring
 
 @pytest.mark.asyncio
 async def test_inheritance(app):

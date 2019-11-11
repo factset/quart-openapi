@@ -1,3 +1,8 @@
+"""utils.py
+
+Helper functions for use in other modules
+"""
+
 from copy import deepcopy
 from itertools import filterfalse
 from inspect import getdoc
@@ -53,7 +58,7 @@ def extract_path(path: str) -> str:
     """
     return _RE_URL.sub(r'{\1}', path)
 
-class cached_property(object):
+class cached_property():  # pylint: disable=too-few-public-methods
     """A quick class to cache an object property produced by a function, to be used in place
     of `@property` if the function to return the value of a property is expensive. Currently
     used to cache the result of the OpenApi docs for serving quickly to '/openapi.json'.
@@ -78,8 +83,8 @@ def not_none(data: Dict[Any, Any]) -> Dict[Any, Any]:
 
 def camel_to_snake(name: str) -> str:
     """Convert CamelCase to snake_case """
-    s1 = _FIRST_CAP_RE.sub(r'\1_\2', name)
-    return _ALL_CAP_RE.sub(r'\1_\2', s1).lower()
+    snake1 = _FIRST_CAP_RE.sub(r'\1_\2', name)
+    return _ALL_CAP_RE.sub(r'\1_\2', snake1).lower()
 
 def merge(first: Dict[Any, Any], second: Dict[Any, Any]) -> Dict[Any, Any]:
     """Utility function to merge the keys and values of two dicts recursively
