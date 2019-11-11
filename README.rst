@@ -1,6 +1,9 @@
 =============
-Quart-OpenAPI
+Quart-OpenAPI  
 =============
+
+.. image:: https://travis-ci.com/factset/quart-openapi.svg?branch=master
+   :target: https://travis-ci.com/factset/quart-openapi
 
 Documentation can be found on https://factset.github.io/quart-openapi/
 
