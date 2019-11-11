@@ -87,7 +87,16 @@
           <div class="body" role="main">
             
   <h1>Source code for quart_openapi</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="sd">&quot;&quot;&quot;quart-openapi</span>
+
+<span class="sd">Quart-OpenAPI is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.</span>
+<span class="sd">If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTPlus_</span>
+<span class="sd">generating a swagger.json route and adds a Resource base class for building RESTful APIs.</span>
+
+<span class="sd">Documentation can be found on https://factset.github.io/quart-openapi/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">.resource</span> <span class="k">import</span> <span class="n">Resource</span>
 <span class="kn">from</span> <span class="nn">.pint</span> <span class="k">import</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">OpenApiView</span><span class="p">,</span> <span class="n">PintBlueprint</span>
 <span class="kn">from</span> <span class="nn">.swagger</span> <span class="k">import</span> <span class="n">Swagger</span>

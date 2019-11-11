@@ -102,7 +102,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api</strong> (<a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a>) – the main app interface for getting the base model and resources</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api</strong> (<a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><em>Pint</em></a>) – the main app interface for getting the base model and resources</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
 </tr>
@@ -124,9 +124,9 @@
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="quart_openapi.Swagger.description_for">
-<code class="descname">description_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.description_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.description_for" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">description_for</code><span class="sig-paren">(</span><em>doc</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.description_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.description_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the description metadata and fallback on the whole docstring</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -167,9 +167,9 @@ for the expected request body.</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="quart_openapi.Swagger.extract_resource_doc">
-<code class="descname">extract_resource_doc</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.extract_resource_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.extract_resource_doc" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">extract_resource_doc</code><span class="sig-paren">(</span><em>resource</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.extract_resource_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.extract_resource_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the doc mapping for this resource that we saved on it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -235,9 +235,9 @@ a <cite>doc</cite> parameter</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="quart_openapi.Swagger.process_headers">
-<code class="descname">process_headers</code><span class="sig-paren">(</span><em>response</em>, <em>doc</em>, <em>method=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.process_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.process_headers" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">process_headers</code><span class="sig-paren">(</span><em>response</em>, <em>doc</em>, <em>method=None</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.process_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.process_headers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Properly form the header parameter objects according to the openapi 3.0 spec</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -381,7 +381,7 @@ level, method level and any additional headers passed in</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>validator</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code>]]) – either the name of a validator, a <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v3.1.2.dev17+ge08fbd7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a> instance,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>validator</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Union" title="(in Python v3.6)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#int" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Type" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#bool" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code>, <a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Iterable" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code>]]) – either the name of a validator, a <a class="reference external" href="https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator" title="(in jsonschema v3.1.2.dev17+ge08fbd7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Draft4Validator</span></code></a> instance,
 or the actual type of the value. Passing a list or tuple will create a schema
 for an array of that type</td>
 </tr>
@@ -393,9 +393,9 @@ for an array of that type</td>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="quart_openapi.Swagger.tags_for">
-<code class="descname">tags_for</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.tags_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.tags_for" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">tags_for</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quart_openapi/swagger.html#Swagger.tags_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quart_openapi.Swagger.tags_for" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of tags for output</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

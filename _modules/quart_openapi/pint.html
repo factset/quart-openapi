@@ -87,21 +87,30 @@
           <div class="body" role="main">
             
   <h1>Source code for quart_openapi.pint</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">quart</span> <span class="k">import</span> <span class="n">Quart</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">Blueprint</span>
-<span class="kn">from</span> <span class="nn">quart.views</span> <span class="k">import</span> <span class="n">http_method_funcs</span>
+<span></span><span class="sd">&quot;&quot;&quot;pint.py</span>
+
+<span class="sd">Main file that provides the definitions for the Pint class and its dependants for enhancing the quart decorators</span>
+<span class="sd">and hooking into them in order to generate the openapi documentaion</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="k">import</span> <span class="n">Draft4Validator</span><span class="p">,</span> <span class="n">RefResolver</span><span class="p">,</span> <span class="n">FormatChecker</span>
-<span class="kn">from</span> <span class="nn">jsonschema.exceptions</span> <span class="k">import</span> <span class="n">ValidationError</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">isclass</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">http</span> <span class="k">import</span> <span class="n">HTTPStatus</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">isclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="k">import</span> <span class="n">Draft4Validator</span><span class="p">,</span> <span class="n">FormatChecker</span><span class="p">,</span> <span class="n">RefResolver</span>
+<span class="kn">from</span> <span class="nn">jsonschema.exceptions</span> <span class="k">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">quart</span> <span class="k">import</span> <span class="n">Blueprint</span><span class="p">,</span> <span class="n">Quart</span><span class="p">,</span> <span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">quart.views</span> <span class="k">import</span> <span class="n">http_method_funcs</span>
+
 <span class="kn">from</span> <span class="nn">.cors</span> <span class="k">import</span> <span class="n">crossdomain</span>
 <span class="kn">from</span> <span class="nn">.resource</span> <span class="k">import</span> <span class="n">Resource</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">merge</span><span class="p">,</span> <span class="n">camel_to_snake</span>
-<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">ValidatorTypes</span><span class="p">,</span> <span class="n">ExpectedDescList</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">ExpectedDescList</span><span class="p">,</span> <span class="n">ValidatorTypes</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">camel_to_snake</span><span class="p">,</span> <span class="n">merge</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;quart.serving&#39;</span><span class="p">)</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;quart.serving&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_expand_params_desc</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Used to convert `{&#39;param&#39;: &#39;Description String&#39;}` into</span>
@@ -114,15 +123,18 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
 
-<span class="k">class</span> <span class="nc">BaseRest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">BaseRest</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Base object for handling the RESTful resources for routing and generating openapi json. Used by :class:`Pint`</span>
 <span class="sd">    and :class:`PintBlueprint`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">contact_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">contact_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">base_model_schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">RefResolver</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ApiInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;ApiInfo&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
+    <span class="n">ContactInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;ContactInfo&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">contact_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">contact_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">base_model_schema</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">RefResolver</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Construct the Base Rest object</span>
 
@@ -145,12 +157,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span> <span class="o">=</span> <span class="n">validate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contact</span> <span class="o">=</span> <span class="n">contact</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contact_url</span> <span class="o">=</span> <span class="n">contact_url</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contact_email</span> <span class="o">=</span> <span class="n">contact_email</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info</span> <span class="o">=</span> <span class="n">BaseRest</span><span class="o">.</span><span class="n">ApiInfo</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="c1"># self.title = title</span>
+        <span class="c1"># self.description = description</span>
+        <span class="c1"># self.version = version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_contact_obj</span> <span class="o">=</span> <span class="n">BaseRest</span><span class="o">.</span><span class="n">ContactInfo</span><span class="p">(</span><span class="n">contact</span><span class="p">,</span> <span class="n">contact_url</span><span class="p">,</span> <span class="n">contact_email</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">base_model_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_model_schema</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">base_model_schema</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -160,7 +171,37 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ref_resolver</span> <span class="o">=</span> <span class="n">RefResolver</span><span class="o">.</span><span class="n">from_schema</span><span class="p">(</span><span class="n">base_model_schema</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base_model_schema</span><span class="p">,</span> <span class="n">RefResolver</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ref_resolver</span> <span class="o">=</span> <span class="n">base_model_schema</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_error_handler</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_json_validation_exc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_error_handler</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_json_validation_exc</span><span class="p">)</span>  <span class="c1"># pylint: disable=no-member</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return title string from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">title</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return info description string from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">description</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return version string from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="o">.</span><span class="n">version</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">contact</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return contact name string from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contact_obj</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">contact_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return contact url from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contact_obj</span><span class="o">.</span><span class="n">url</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">contact_email</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return contact info email from API&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_contact_obj</span><span class="o">.</span><span class="n">email</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">handle_json_validation_exc</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">ValidationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
@@ -177,7 +218,7 @@
 <span class="sd">           :meth:`quart.Quart.register_error_handler`</span>
 <span class="sd">               Registering error handlers with quart</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;request body validation failed, returning error: msg: </span><span class="si">%s</span><span class="s1">, instance: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;request body validation failed, returning error: msg: </span><span class="si">%s</span><span class="s1">, instance: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span>
                      <span class="n">error</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
             <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Request Body failed validation&#39;</span><span class="p">,</span>
@@ -208,7 +249,7 @@
     <span class="k">def</span> <span class="nf">__schema__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;The schema produced by the Swagger object using the information in this instance&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">.swagger</span> <span class="k">import</span> <span class="n">Swagger</span>
+            <span class="kn">from</span> <span class="nn">.swagger</span> <span class="k">import</span> <span class="n">Swagger</span> <span class="c1"># pylint: disable=import-outside-toplevel</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span> <span class="o">=</span> <span class="n">Swagger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schema</span>
 
@@ -221,8 +262,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validators</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validators</span> <span class="k">else</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_add_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span>
-                     <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-                      <span class="n">provide_automatic_options</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                      <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">provide_automatic_options</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Called by :meth:`route` in order to process the resource or view function and only add it to the</span>
 <span class="sd">        list of openapi resources if it&#39;s a class, allowing paths to be left out of the openapi documentation</span>
 <span class="sd">        by declaring them as functions.</span>
@@ -244,11 +285,10 @@
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;_pint_</span><span class="si">{resource.__name__}</span><span class="s1">_view_wrapper&#39;</span><span class="p">,</span> <span class="n">view_func</span><span class="p">)</span>
             <span class="n">methods</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">methods</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">resource</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span><span class="p">))</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">view_func</span><span class="p">,</span> <span class="n">methods</span><span class="p">,</span>
-                          <span class="n">provide_automatic_options</span><span class="o">=</span><span class="n">provide_automatic_options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">view_func</span><span class="p">,</span> <span class="n">methods</span><span class="p">,</span>  <span class="c1"># pylint: disable=no-member</span>
+                             <span class="n">provide_automatic_options</span><span class="o">=</span><span class="n">provide_automatic_options</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">_in</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">_in</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decorator for describing parameters for a given resource or specific request method.</span>
 
 <span class="sd">        :param name: Parameter name in documention</span>
@@ -287,8 +327,7 @@
         <span class="n">param</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">param</span><span class="p">})</span>
 
-    <span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="p">:</span> <span class="n">ValidatorTypes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validator</span><span class="p">:</span> <span class="n">ValidatorTypes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decorator for documenting the response from a route</span>
 
 <span class="sd">        :param code: The HTTP Response code for this response</span>
@@ -315,7 +354,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="n">code</span><span class="p">:</span> <span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)})</span>
 
-    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">methods</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decorator for establishing routes</span>
 
 <span class="sd">        :param path: the path to route on, should start with a `/`, may contain params converters</span>
@@ -327,6 +366,8 @@
 
 <span class="sd">        .. seealso:: Base class version :meth:`~quart.Quart.route`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">methods</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">]</span>
         <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func_or_viewcls</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]:</span>
             <span class="n">doc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;doc&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -352,7 +393,8 @@
 
 <span class="sd">        .. todo:: Ensure that models with the same name in different categories don&#39;t conflict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">validator</span> <span class="o">=</span> <span class="n">Draft4Validator</span><span class="p">({</span> <span class="s1">&#39;$ref&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s1">&#39;#/components/</span><span class="si">{category}</span><span class="s1">/</span><span class="si">{name}</span><span class="s1">&#39;</span> <span class="p">},</span> <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ref_resolver</span><span class="p">,</span> <span class="n">format_checker</span><span class="o">=</span><span class="n">FormatChecker</span><span class="p">())</span>
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">Draft4Validator</span><span class="p">({</span><span class="s1">&#39;$ref&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s1">&#39;#/components/</span><span class="si">{category}</span><span class="s1">/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">},</span>
+                                    <span class="n">resolver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ref_resolver</span><span class="p">,</span> <span class="n">format_checker</span><span class="o">=</span><span class="n">FormatChecker</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validators</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">validator</span>
         <span class="k">return</span> <span class="n">validator</span>
 
@@ -374,7 +416,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_validators</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">validator</span>
         <span class="k">return</span> <span class="n">validator</span>
 
-    <span class="k">def</span> <span class="nf">_handle_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_handle_doc</span><span class="p">(</span><span class="n">documented</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Internal function for merging doc specs for various HTTP verbs and handling expects&quot;&quot;&quot;</span>
         <span class="c1"># adapted from flask_restplus</span>
         <span class="n">_expand_params_desc</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
@@ -385,7 +428,7 @@
                 <span class="n">_expand_params_desc</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">])</span>
                 <span class="k">if</span> <span class="s1">&#39;expect&#39;</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
                     <span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="n">http_method</span><span class="p">][</span><span class="s1">&#39;expect&#39;</span><span class="p">]]</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">__apidoc__</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;__apidoc__&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">doc</span><span class="p">)</span>
+        <span class="n">documented</span><span class="o">.</span><span class="n">__apidoc__</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">documented</span><span class="p">,</span> <span class="s1">&#39;__apidoc__&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">doc</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generic decorator for adding docs via keys pointing to dictionaries</span>
@@ -509,7 +552,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Pint.__init__"><a class="viewcode-back" href="../../pint.html#quart_openapi.Pint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">no_openapi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Construct the Pint object, see :meth:`BaseRest.__init__` for an explanation of the args and kwargs.</span>
 
 <span class="sd">        :param \*args: non-keyword args passed to :class:`BaseRest`</span>
 <span class="sd">        :param no_openapi: set this to True to disable the auto creation of the /openapi.json route</span>
@@ -542,12 +585,12 @@
         <span class="sd">&quot;&quot;&quot;Will forward all arguments and keyword arguments to Blueprints&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PintBlueprint.register"><a class="viewcode-back" href="../../pint.html#quart_openapi.PintBlueprint.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PintBlueprint.register"><a class="viewcode-back" href="../../pint.html#quart_openapi.PintBlueprint.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering</span>
 <span class="sd">        this blueprint, then call the parent register method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">url_prefix</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">app</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">res</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{prefix}{path}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">])</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">res</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{prefix}{path}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">])</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">first_registration</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OpenApiView"><a class="viewcode-back" href="../../pint.html#quart_openapi.OpenApiView">[docs]</a><span class="k">class</span> <span class="nc">OpenApiView</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
@@ -568,9 +611,10 @@
 
     <span class="c1"># use CORS to allow other origins to access the openapi.json route</span>
     <span class="c1"># this way it can also be used with swagger UI</span>
-    <span class="nd">@crossdomain</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="OpenApiView.get"><a class="viewcode-back" href="../../pint.html#quart_openapi.OpenApiView.get">[docs]</a>    <span class="nd">@crossdomain</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span></div>
+        <span class="sd">&quot;&quot;&quot;Return the schema for get requests&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">__schema__</span><span class="p">),</span> <span class="mi">200</span></div></div>
 </pre></div>
 
           </div>

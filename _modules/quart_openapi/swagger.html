@@ -87,16 +87,24 @@
           <div class="body" role="main">
             
   <h1>Source code for quart_openapi.swagger</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">quart.routing</span> <span class="k">import</span> <span class="n">ROUTE_VAR_RE</span><span class="p">,</span> <span class="n">Map</span> <span class="k">as</span> <span class="n">RouteMap</span>
-<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="k">import</span> <span class="n">Draft4Validator</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">Hashable</span>
+<span></span><span class="sd">&quot;&quot;&quot;swagger.py</span>
+
+<span class="sd">Provides the View class for generating the openapi.json file on the fly based on the Pint instance and decorators</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">http</span> <span class="k">import</span> <span class="n">HTTPStatus</span>
-<span class="kn">from</span> <span class="nn">.pint</span> <span class="k">import</span> <span class="n">Pint</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span>
+                    <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="k">import</span> <span class="n">Draft4Validator</span>
+<span class="kn">from</span> <span class="nn">quart.routing</span> <span class="k">import</span> <span class="n">ROUTE_VAR_RE</span>
+<span class="kn">from</span> <span class="nn">quart.routing</span> <span class="k">import</span> <span class="n">Map</span> <span class="k">as</span> <span class="n">RouteMap</span>
+
 <span class="kn">from</span> <span class="nn">.resource</span> <span class="k">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">get_expect_args</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">parse_docstring</span><span class="p">,</span> <span class="n">not_none</span><span class="p">,</span> <span class="n">merge</span><span class="p">,</span> <span class="n">extract_path</span>
-<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">ValidatorTypes</span><span class="p">,</span> <span class="n">HeaderType</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">HeaderType</span><span class="p">,</span> <span class="n">ValidatorTypes</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">extract_path</span><span class="p">,</span> <span class="n">merge</span><span class="p">,</span> <span class="n">not_none</span><span class="p">,</span> <span class="n">parse_docstring</span>
 
 <span class="n">DEFAULT_RESPONSE_DESCRIPTION</span> <span class="o">=</span> <span class="s1">&#39;Success&#39;</span>
 <span class="n">DEFAULT_RESPONSE</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">DEFAULT_RESPONSE_DESCRIPTION</span><span class="p">}</span>
@@ -125,7 +133,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">header</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">header</span><span class="p">}</span>
     <span class="n">typedef</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">typedef</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">)</span> <span class="ow">and</span> <span class="n">typedef</span> <span class="ow">in</span> <span class="n">PY_TYPES</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">typedef</span> <span class="ow">in</span> <span class="n">PY_TYPES</span><span class="p">:</span>
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PY_TYPES</span><span class="p">[</span><span class="n">typedef</span><span class="p">]</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">typedef</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">typedef</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">typedef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">PY_TYPES</span><span class="p">:</span>
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;array&#39;</span>
@@ -136,7 +144,7 @@
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">typedef</span>
     <span class="k">return</span> <span class="n">not_none</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">_parse_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_parse_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Generator for the converters for the path parameters</span>
 
 <span class="sd">    :param rule: a route string</span>
@@ -175,11 +183,11 @@
         <span class="n">params</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="o">=</span> <span class="n">param</span>
     <span class="k">return</span> <span class="n">params</span>
 
-<span class="k">class</span> <span class="nc">Swagger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Swagger</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Class for generating a openapi.json from the resources and information defined with</span>
-<span class="sd">    :class:`~factset.swaggen.Pint`&quot;&quot;&quot;</span>
+<span class="sd">    :class:`~factset.quart_openapi.Pint`&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Swagger.__init__"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">Pint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Swagger.__init__"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="s1">&#39;Pint&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Construct a Swagger object for generating the openapi Json</span>
 
 <span class="sd">        :param api: the main app interface for getting the base model and resources</span>
@@ -214,7 +222,7 @@
             <span class="n">paths</span><span class="p">[</span><span class="n">extract_path</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize_resource</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span>
 
         <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PREFERRED_URL_SCHEME&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;http&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PREFER_SECURE_URLS&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;https&#39;</span><span class="p">)</span>
+                                     <span class="s1">&#39;http&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PREFER_SECURE_URLS&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;https&#39;</span><span class="p">)</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;openapi&#39;</span><span class="p">:</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">,</span>
             <span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="n">infos</span><span class="p">,</span>
@@ -253,19 +261,21 @@
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Swagger.tags_for"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.tags_for">[docs]</a>    <span class="k">def</span> <span class="nf">tags_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<div class="viewcode-block" id="Swagger.tags_for"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.tags_for">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">tags_for</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;Get the list of tags for output</span>
 
 <span class="sd">        :param doc: a mapping from HTTP verb to the properties for serialization</span>
 <span class="sd">        :return: a list of string containing tags as described by the openapi 3.0 spec</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]:</span>  
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]:</span>
             <span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tags</span></div>
 
 
-<div class="viewcode-block" id="Swagger.description_for"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.description_for">[docs]</a>    <span class="k">def</span> <span class="nf">description_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Swagger.description_for"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.description_for">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">description_for</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Extract the description metadata and fallback on the whole docstring</span>
 
 <span class="sd">        :param doc: a mapping from HTTP verb to the properties for serialization</span>
@@ -327,21 +337,28 @@
 
 <span class="sd">        __  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responseObject</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">process_response</span><span class="p">(</span><span class="n">resp</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">validator</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="n">resp</span>
+                <span class="n">validator</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">resp</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">description</span><span class="p">,</span> <span class="n">validator</span> <span class="o">=</span> <span class="n">resp</span>
+                <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported response specification&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
         <span class="n">responses</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">,</span> <span class="n">doc</span><span class="p">[</span><span class="n">method</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="s1">&#39;responses&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;responses&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                        <span class="n">description</span> <span class="o">=</span> <span class="n">response</span>
-                        <span class="n">validator</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">response</span>
-                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                        <span class="n">description</span><span class="p">,</span> <span class="n">validator</span> <span class="o">=</span> <span class="n">response</span>
-                        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported response specification&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">,</span> <span class="n">doc</span><span class="p">[</span><span class="n">method</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s1">&#39;responses&#39;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;responses&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">description</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">process_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
                     <span class="n">description</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="n">DEFAULT_RESPONSE_DESCRIPTION</span>
                     <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">responses</span><span class="p">:</span>
                         <span class="n">responses</span><span class="p">[</span><span class="n">code</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
@@ -359,8 +376,9 @@
             <span class="n">responses</span><span class="p">[</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_headers</span><span class="p">(</span><span class="n">DEFAULT_RESPONSE</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">doc</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">responses</span></div>
 
-<div class="viewcode-block" id="Swagger.process_headers"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.process_headers">[docs]</a>    <span class="k">def</span> <span class="nf">process_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<div class="viewcode-block" id="Swagger.process_headers"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.process_headers">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process_headers</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Properly form the header parameter objects according to the openapi 3.0 spec</span>
 
 <span class="sd">        :param response: Response object definition</span>
@@ -394,13 +412,14 @@
                 <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;array&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;items&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize_schema</span><span class="p">(</span><span class="n">validator</span><span class="p">)</span>
             <span class="p">}</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">Draft4Validator</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">Draft4Validator</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">validator</span><span class="o">.</span><span class="n">schema</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">validator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">get_validator</span><span class="p">(</span><span class="n">validator</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">validator</span><span class="o">.</span><span class="n">schema</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span> <span class="ow">and</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">PY_TYPES</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">PY_TYPES</span><span class="p">[</span><span class="n">validator</span><span class="p">]}</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span> <span class="ow">and</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">PY_TYPES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">PY_TYPES</span><span class="p">[</span><span class="n">validator</span><span class="p">]}</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Swagger.serialize_resource"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.serialize_resource">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                            <span class="n">methods</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -415,7 +434,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_resource_doc</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="p">{}</span>
 
         <span class="n">path</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">resource</span><span class="o">.</span><span class="n">methods</span> <span class="ow">or</span> <span class="p">[]]:</span>
@@ -447,7 +466,8 @@
             <span class="n">operation</span><span class="p">[</span><span class="s1">&#39;deprecated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">not_none</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Swagger.extract_resource_doc"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.extract_resource_doc">[docs]</a>    <span class="k">def</span> <span class="nf">extract_resource_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<div class="viewcode-block" id="Swagger.extract_resource_doc"><a class="viewcode-back" href="../../swagger.html#quart_openapi.Swagger.extract_resource_doc">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_resource_doc</span><span class="p">(</span><span class="n">resource</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Resource</span><span class="p">,</span> <span class="n">Callable</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Return the doc mapping for this resource that we saved on it</span>
 
 <span class="sd">        :param resource: The :class:`Resource` derived class or decorated view function</span>
@@ -476,12 +496,12 @@
             <span class="k">if</span> <span class="n">method_doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">method_doc</span><span class="p">[</span><span class="s1">&#39;docstring&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse_docstring</span><span class="p">(</span><span class="n">method_impl</span><span class="p">)</span>
                 <span class="n">method_params</span> <span class="o">=</span> <span class="n">method_doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">,</span> <span class="p">{})</span>
-                <span class="n">inherited_params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+                <span class="n">inherited_params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
                 <span class="n">method_doc</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">inherited_params</span><span class="p">,</span> <span class="n">method_params</span><span class="p">)</span>
                 <span class="n">method_tags</span> <span class="o">=</span> <span class="n">method_doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">,</span> <span class="p">[])</span>
                 <span class="n">inherited_tags</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
                 <span class="n">method_doc</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">inherited_tags</span><span class="p">,</span> <span class="n">method_tags</span><span class="p">)</span>
-                
+
             <span class="n">doc</span><span class="p">[</span><span class="n">method</span><span class="p">]</span> <span class="o">=</span> <span class="n">method_doc</span>
         <span class="k">return</span> <span class="n">doc</span></div>
 

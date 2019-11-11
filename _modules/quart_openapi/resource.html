@@ -87,18 +87,24 @@
           <div class="body" role="main">
             
   <h1>Source code for quart_openapi.resource</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">quart</span> <span class="k">import</span> <span class="n">request</span>
-<span class="kn">from</span> <span class="nn">quart.views</span> <span class="k">import</span> <span class="n">MethodView</span>
-<span class="kn">from</span> <span class="nn">quart.typing</span> <span class="k">import</span> <span class="n">ResponseReturnValue</span>
+<span></span><span class="sd">&quot;&quot;&quot;resource.py</span>
+
+<span class="sd">Provide the Resource Base class to inherit from for using the class based route definitions</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">ValidatorTypes</span><span class="p">,</span> <span class="n">ExpectedDescList</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;quart.serving&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">quart</span> <span class="k">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">quart.typing</span> <span class="k">import</span> <span class="n">ResponseReturnValue</span>
+<span class="kn">from</span> <span class="nn">quart.views</span> <span class="k">import</span> <span class="n">MethodView</span>
 
-<span class="k">def</span> <span class="nf">get_expect_args</span><span class="p">(</span><span class="n">expect</span><span class="p">:</span> <span class="n">ExpectedDescList</span><span class="p">,</span>
-                     <span class="n">default_content_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValidatorTypes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="kn">from</span> <span class="nn">.typing</span> <span class="k">import</span> <span class="n">ExpectedDescList</span><span class="p">,</span> <span class="n">ValidatorTypes</span>
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;quart.serving&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_expect_args</span><span class="p">(</span><span class="n">expect</span><span class="p">:</span> <span class="n">ExpectedDescList</span><span class="p">,</span> <span class="n">default_content_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
+                   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValidatorTypes</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;Normalize the different tuple sizes for the expect decorator</span>
 
 <span class="sd">    :param expect: Either a validator, a tuple of size 1 containing a validator,</span>
@@ -169,11 +175,10 @@
                     <span class="k">if</span> <span class="n">content_type</span> <span class="o">==</span> <span class="s1">&#39;application/json&#39;</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">is_json</span><span class="p">:</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                         <span class="k">return</span> <span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-                    <span class="k">elif</span> <span class="n">content_type</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mimetype</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">content_type</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">mimetype</span><span class="p">:</span>
                         <span class="k">return</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Request didn&#39;t pass any of the available validations&quot;</span><span class="p">)</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Request didn&#39;t pass any of the available validations&quot;</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;request didn&#39;t pass validation&quot;</span><span class="p">)</span></div>
-
 </pre></div>
 
           </div>
