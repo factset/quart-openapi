@@ -1,18 +1,27 @@
-from quart import Quart, jsonify, Blueprint
-from quart.views import http_method_funcs
+"""pint.py
+
+Main file that provides the definitions for the Pint class and its dependants for enhancing the quart decorators
+and hooking into them in order to generate the openapi documentaion
+"""
+
 import json
-from jsonschema import Draft4Validator, RefResolver, FormatChecker
-from jsonschema.exceptions import ValidationError
 import logging
-from inspect import isclass
+from collections import namedtuple
 from http import HTTPStatus
+from inspect import isclass
+from typing import Any, Callable, Dict, Iterable, Optional, Tuple, Union
+
+from jsonschema import Draft4Validator, FormatChecker, RefResolver
+from jsonschema.exceptions import ValidationError
+from quart import Blueprint, Quart, jsonify
+from quart.views import http_method_funcs
+
 from .cors import crossdomain
 from .resource import Resource
-from .utils import cached_property, merge, camel_to_snake
-from .typing import ValidatorTypes, ExpectedDescList
-from typing import Optional, Union, Dict, Callable, Iterable, Tuple, Any
+from .typing import ExpectedDescList, ValidatorTypes
+from .utils import cached_property, camel_to_snake, merge
 
-logger = logging.getLogger('quart.serving')
+LOGGER = logging.getLogger('quart.serving')
 
 def _expand_params_desc(data: Dict[str, Any]) -> None:
     """Used to convert `{'param': 'Description String'}` into
@@ -25,15 +34,18 @@ def _expand_params_desc(data: Dict[str, Any]) -> None:
             if isinstance(description, str):
                 data['params'][name] = {'description': description}
 
-class BaseRest(object):
+class BaseRest():
     """Base object for handling the RESTful resources for routing and generating openapi json. Used by :class:`Pint`
     and :class:`PintBlueprint`
     """
 
-    def __init__(self, *args: Any, title: Optional[str]=None, contact: Optional[str]=None,
-                 contact_url: Optional[str]=None, contact_email: Optional[str]=None,
-                 version: str='1.0', description: Optional[str]=None, validate: bool=True,
-                 base_model_schema: Optional[Union[str, Dict[str, Any], RefResolver]]=None,
+    ApiInfo = namedtuple('ApiInfo', ['title', 'description', 'version'])
+    ContactInfo = namedtuple('ContactInfo', ['name', 'url', 'email'])
+
+    def __init__(self, *args: Any, title: Optional[str] = None, contact: Optional[str] = None,
+                 contact_url: Optional[str] = None, contact_email: Optional[str] = None,
+                 version: str = '1.0', description: Optional[str] = None, validate: bool = True,
+                 base_model_schema: Optional[Union[str, Dict[str, Any], RefResolver]] = None,
                  **kwargs: Any) -> None:
         r"""Construct the Base Rest object
 
@@ -56,12 +68,11 @@ class BaseRest(object):
         self._validate = validate
         self._resources = []
         self._schema = None
-        self.title = title
-        self.description = description
-        self.version = version
-        self.contact = contact
-        self.contact_url = contact_url
-        self.contact_email = contact_email
+        self._info = BaseRest.ApiInfo(title, description, version)
+        # self.title = title
+        # self.description = description
+        # self.version = version
+        self._contact_obj = BaseRest.ContactInfo(contact, contact_url, contact_email)
         if base_model_schema is not None:
             if isinstance(base_model_schema, str):
                 with open(base_model_schema, 'r', encoding='utf-8') as f:
@@ -72,6 +83,36 @@ class BaseRest(object):
             elif isinstance(base_model_schema, RefResolver):
                 self._ref_resolver = base_model_schema
         self.register_error_handler(ValidationError, self.handle_json_validation_exc)  # pylint: disable=no-member
+
+    @property
+    def title(self) -> str:
+        """Return title string from API"""
+        return self._info.title
+
+    @property
+    def description(self) -> str:
+        """Return info description string from API"""
+        return self._info.description
+
+    @property
+    def version(self) -> str:
+        """Return version string from API"""
+        return self._info.version
+
+    @property
+    def contact(self) -> str:
+        """Return contact name string from API"""
+        return self._contact_obj.name
+
+    @property
+    def contact_url(self) -> str:
+        """Return contact url from API"""
+        return self._contact_obj.url
+
+    @property
+    def contact_email(self) -> str:
+        """Return contact info email from API"""
+        return self._contact_obj.email
 
     @staticmethod
     def handle_json_validation_exc(error: ValidationError) -> Dict[str, Union[str, Dict[str, str]]]:
@@ -88,7 +129,7 @@ class BaseRest(object):
            :meth:`quart.Quart.register_error_handler`
                Registering error handlers with quart
         """
-        logger.error('request body validation failed, returning error: msg: %s, instance: %r',
+        LOGGER.error('request body validation failed, returning error: msg: %s, instance: %r',
                      error.message, error.instance)
         return jsonify({
             'message': 'Request Body failed validation',
@@ -119,7 +160,7 @@ class BaseRest(object):
     def __schema__(self) -> Dict[str, Union[str, Dict[str, Any]]]:
         """The schema produced by the Swagger object using the information in this instance"""
         if not self._schema:
-            from .swagger import Swagger
+            from .swagger import Swagger # pylint: disable=import-outside-toplevel
             self._schema = Swagger(self).as_dict()
         return self._schema
 
@@ -132,8 +173,8 @@ class BaseRest(object):
         return self._validators[name] if name in self._validators else None
 
     def _add_resource(self, resource: Union[Resource, Callable],
-                     path: str, methods: Iterable[str], endpoint: Optional[str]=None, *args,
-                      provide_automatic_options: bool=True, **kwargs: Any) -> None:
+                      path: str, methods: Iterable[str], *args, endpoint: Optional[str] = None,
+                      provide_automatic_options: bool = True, **kwargs: Any) -> None:
         r"""Called by :meth:`route` in order to process the resource or view function and only add it to the
         list of openapi resources if it's a class, allowing paths to be left out of the openapi documentation
         by declaring them as functions.
@@ -156,10 +197,9 @@ class BaseRest(object):
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
         super().add_url_rule(path, endpoint, view_func, methods,  # pylint: disable=no-member
-                          provide_automatic_options=provide_automatic_options, **kwargs)
+                             provide_automatic_options=provide_automatic_options, **kwargs)
 
-    def param(self, name: str, description: Optional[str]=None,
-              _in: str='query', **kwargs: Any) -> Callable:
+    def param(self, name: str, description: Optional[str] = None, _in: str = 'query', **kwargs: Any) -> Callable:
         r"""Decorator for describing parameters for a given resource or specific request method.
 
         :param name: Parameter name in documention
@@ -198,8 +238,7 @@ class BaseRest(object):
         param['description'] = description
         return self.doc(params={name: param})
 
-    def response(self, code: HTTPStatus, description: str, validator: ValidatorTypes=None,
-                 **kwargs: Any) -> Callable:
+    def response(self, code: HTTPStatus, description: str, validator: ValidatorTypes = None, **kwargs: Any) -> Callable:
         r"""Decorator for documenting the response from a route
 
         :param code: The HTTP Response code for this response
@@ -226,7 +265,7 @@ class BaseRest(object):
         """
         return self.doc(responses={code: (description, validator, kwargs)})
 
-    def route(self, path: str, methods: Iterable[str]=['GET'], *args, **kwargs) -> Callable:
+    def route(self, path: str, *args, methods: Optional[Iterable[str]] = None, **kwargs) -> Callable:
         r"""Decorator for establishing routes
 
         :param path: the path to route on, should start with a `/`, may contain params converters
@@ -238,6 +277,8 @@ class BaseRest(object):
 
         .. seealso:: Base class version :meth:`~quart.Quart.route`
         """
+        if methods is None:
+            methods = ['GET']
         def decorator(func_or_viewcls: Union[Resource, Callable]) -> Union[Resource, Callable]:
             doc = kwargs.pop('doc', None)
             if doc is not None:
@@ -263,7 +304,8 @@ class BaseRest(object):
 
         .. todo:: Ensure that models with the same name in different categories don't conflict
         """
-        validator = Draft4Validator({ '$ref': f'#/components/{category}/{name}' }, resolver=self._ref_resolver, format_checker=FormatChecker())
+        validator = Draft4Validator({'$ref': f'#/components/{category}/{name}'},
+                                    resolver=self._ref_resolver, format_checker=FormatChecker())
         self._validators[name] = validator
         return validator
 
@@ -285,7 +327,8 @@ class BaseRest(object):
         self._validators[name] = validator
         return validator
 
-    def _handle_doc(self, cls: Callable, doc: Dict[str, Any]) -> None:
+    @staticmethod
+    def _handle_doc(documented: Callable, doc: Dict[str, Any]) -> None:
         """Internal function for merging doc specs for various HTTP verbs and handling expects"""
         # adapted from flask_restplus
         _expand_params_desc(doc)
@@ -296,7 +339,7 @@ class BaseRest(object):
                 _expand_params_desc(doc[http_method])
                 if 'expect' in doc[http_method] and not isinstance(doc[http_method]['expect'], (list, tuple)):
                     doc[http_method]['expect'] = [doc[http_method]['expect']]
-        cls.__apidoc__ = merge(getattr(cls, '__apidoc__', {}), doc)
+        documented.__apidoc__ = merge(getattr(documented, '__apidoc__', {}), doc)
 
     def doc(self, **kwargs: Any) -> Callable:
         """Generic decorator for adding docs via keys pointing to dictionaries
@@ -453,12 +496,12 @@ class PintBlueprint(BaseRest, Blueprint):
         """Will forward all arguments and keyword arguments to Blueprints"""
         super().__init__(*args, **kwargs)
 
-    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str]=None) -> None:
+    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str] = None) -> None:
         """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
         this blueprint, then call the parent register method
         """
         prefix = url_prefix or self.url_prefix or ''
-        app._resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
+        app.resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
         super().register(app, first_registration, url_prefix=url_prefix)
 
 class OpenApiView(Resource):
@@ -481,4 +524,5 @@ class OpenApiView(Resource):
     # this way it can also be used with swagger UI
     @crossdomain(origin='*')
     async def get(self):
+        """Return the schema for get requests"""
         return jsonify(self.api.__schema__), 200

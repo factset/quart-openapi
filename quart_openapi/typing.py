@@ -1,3 +1,8 @@
+"""typing.py
+
+Provide type definitions for use in other modules
+"""
+
 from typing import Union, Tuple, Iterable, Dict, Any, Type
 from jsonschema import Draft3Validator, Draft4Validator, Draft6Validator, Draft7Validator
 

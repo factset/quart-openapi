@@ -1,7 +1,11 @@
-import pytest
-from quart_openapi import Pint, Resource
-from quart import jsonify
+# pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
+
+import pytest
+from quart import jsonify
+from quart_openapi import Pint, Resource
+
+# pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring,import-outside-toplevel
 
 @pytest.mark.asyncio
 async def test_no_openapi():
@@ -30,30 +34,30 @@ async def test_custom_openapi():
     assert rv.status_code == HTTPStatus.OK
 
     data = await rv.get_json()
-    assert data == {'openapi': '3.0.0',
-                    'info': {
-                        'title': 'App Test',
-                        'version': '1.0',
-                        'contact': {
-                            'name': 'foo',
-                            'email': 'moo@bar.com'
+    assert data == {
+        'openapi': '3.0.0',
+        'info': {
+            'title': 'App Test',
+            'version': '1.0',
+            'contact': {
+                'name': 'foo',
+                'email': 'moo@bar.com'
+            }
+        },
+        'servers': [
+            {'url': 'http://'}
+        ],
+        'paths': {
+            '/hello': {
+                'get': {
+                    'description': '', 'tags': [],
+                    'responses': {
+                        '200': {
+                            'description': 'Success'
                         }
                     },
-                    'servers': [
-                        {'url': 'http://'}
-                    ],
-                    'paths': {
-                        '/hello': {
-                            'get': {
-                                'description': '', 'tags': [],
-                                'responses': {
-                                    '200': {
-                                        'description': 'Success'
-                                    }
-                                },
-                                'operationId': 'get_hello'
-                            }
-                        }
-                    }
+                    'operationId': 'get_hello'
+                }
+            }
+        }
     }
-

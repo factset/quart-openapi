@@ -83,7 +83,7 @@ setup(
     extras_require={
         'doc': doc_require
     },
-    classifiers=(
+    classifiers=[
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3',
@@ -93,7 +93,7 @@ setup(
         'Environment :: Web Environment',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ),
+    ],
     **sphinx_opts
 )
 

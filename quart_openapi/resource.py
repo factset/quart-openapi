@@ -1,15 +1,21 @@
-from typing import Dict, Any, Tuple, Callable
-from quart import request
-from quart.views import MethodView
-from quart.typing import ResponseReturnValue
+"""resource.py
+
+Provide the Resource Base class to inherit from for using the class based route definitions
+"""
+
 import logging
-from .typing import ValidatorTypes, ExpectedDescList
+from typing import Any, Callable, Dict, Tuple
 
-logger = logging.getLogger('quart.serving')
+from quart import request
+from quart.typing import ResponseReturnValue
+from quart.views import MethodView
 
-def get_expect_args(expect: ExpectedDescList,
-                     default_content_type: str='application/json'
-) -> Tuple[ValidatorTypes, str, Dict[str, Any]]:
+from .typing import ExpectedDescList, ValidatorTypes
+
+LOGGER = logging.getLogger('quart.serving')
+
+def get_expect_args(expect: ExpectedDescList, default_content_type: str = 'application/json'
+                   ) -> Tuple[ValidatorTypes, str, Dict[str, Any]]:
     """Normalize the different tuple sizes for the expect decorator
 
     :param expect: Either a validator, a tuple of size 1 containing a validator,
@@ -80,8 +86,7 @@ class Resource(MethodView):
                     if content_type == 'application/json' and request.is_json:
                         data = await request.get_json(force=True, cache=True)
                         return validator.validate(data)
-                    elif content_type == request.mimetype:
+                    if content_type == request.mimetype:
                         return
-                logger.error("Request didn't pass any of the available validations")
+                LOGGER.error("Request didn't pass any of the available validations")
                 raise ValueError("request didn't pass validation")
-

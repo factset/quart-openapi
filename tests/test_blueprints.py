@@ -1,21 +1,15 @@
-import pytest
-from packaging import version
+# pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
-from quart_openapi import Pint, Resource, PintBlueprint
-from quart import Blueprint, url_for, request, ResponseReturnValue, abort
-from quart.__about__ import __version__ as quart_version
+
+import pytest
+from quart import Blueprint, ResponseReturnValue, abort, request, url_for
 from quart.views import MethodView
+from quart_openapi import Pint, PintBlueprint, Resource
 
-QUART_VER_GT_09 = version.parse(quart_version) >= version.parse('0.9.0')
-
-def req_ctx(app: Pint, page: str, method: str=''):
-    if QUART_VER_GT_09:
-        return app.test_request_context(page, method=method)
-    else:
-        return app.test_request_context(method, page)
+# pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring,import-outside-toplevel
 
 @pytest.mark.asyncio
-async def test_root_endpoint_blueprint(app: Pint) -> None:
+async def test_root_endpoint_blueprint(app: Pint, req_ctx) -> None:
     blueprint = Blueprint('blueprint', __name__)
 
     @blueprint.route('/page/')
@@ -28,7 +22,7 @@ async def test_root_endpoint_blueprint(app: Pint) -> None:
         assert '/page/' == url_for('blueprint.route')
 
 @pytest.mark.asyncio
-async def test_blueprint_url_prefix(app: Pint) -> None:
+async def test_blueprint_url_prefix(app: Pint, req_ctx) -> None:
     blueprint = Blueprint('blueprint', __name__)
     prefix = Blueprint('prefix', __name__, url_prefix='/prefix')
 
@@ -73,7 +67,7 @@ async def test_blueprint_error_handler(app: Pint) -> None:
 
     response = await app.test_client().get('/error/')
     assert response.status_code == 409
-    assert b'Something Unique' in (await response.get_data())
+    assert b'Something Unique' in await response.get_data()
 
 @pytest.mark.asyncio
 async def test_blueprint_method_view(app: Pint) -> None:
@@ -96,7 +90,7 @@ async def test_blueprint_method_view(app: Pint) -> None:
     assert 'POST' == (await response.get_data(raw=False))
 
 @pytest.mark.asyncio
-async def test_pint_blueprint_openapi(app: Pint) -> None:
+async def test_pint_blueprint_openapi(app: Pint, req_ctx) -> None:
     blueprint = PintBlueprint('blueprint', __name__, url_prefix='/blueprint')
     app.register_blueprint(blueprint)
 

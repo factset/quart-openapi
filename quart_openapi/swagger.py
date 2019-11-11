@@ -1,13 +1,21 @@
-from quart.routing import ROUTE_VAR_RE, Map as RouteMap
-from jsonschema import Draft4Validator
-from itertools import chain
+"""swagger.py
+
+Provides the View class for generating the openapi.json file on the fly based on the Pint instance and decorators
+"""
+
 from collections import OrderedDict
 from http import HTTPStatus
-from .pint import Pint
+from itertools import chain
+from typing import (Any, Callable, Dict, Generator, Iterable, List, Mapping,
+                    Optional, Tuple, Union)
+
+from jsonschema import Draft4Validator
+from quart.routing import ROUTE_VAR_RE
+from quart.routing import Map as RouteMap
+
 from .resource import Resource, get_expect_args
-from .utils import parse_docstring, not_none, merge, extract_path
-from .typing import ValidatorTypes, HeaderType
-from typing import Dict, Any, Generator, Tuple, Union, Optional, Callable, Iterable, Mapping, List
+from .typing import HeaderType, ValidatorTypes
+from .utils import extract_path, merge, not_none, parse_docstring
 
 DEFAULT_RESPONSE_DESCRIPTION = 'Success'
 DEFAULT_RESPONSE = {'description': DEFAULT_RESPONSE_DESCRIPTION}
@@ -47,7 +55,7 @@ def _clean_header(header: HeaderType) -> Dict[str, Any]:
         header['type'] = typedef
     return not_none(header)
 
-def _parse_rule(rule: str) -> Generator[Tuple[str,str], None, None]:
+def _parse_rule(rule: str) -> Generator[Tuple[str, str], None, None]:
     """Generator for the converters for the path parameters
 
     :param rule: a route string
@@ -86,11 +94,11 @@ def _extract_path_params(path: str) -> OrderedDict:
         params[variable] = param
     return params
 
-class Swagger(object):
+class Swagger():
     """Class for generating a openapi.json from the resources and information defined with
-    :class:`~factset.swaggen.Pint`"""
+    :class:`~factset.quart_openapi.Pint`"""
 
-    def __init__(self, api: Pint) -> None:
+    def __init__(self, api: 'Pint') -> None:
         """Construct a Swagger object for generating the openapi Json
 
         :param api: the main app interface for getting the base model and resources
@@ -125,7 +133,7 @@ class Swagger(object):
             paths[extract_path(path)] = self.serialize_resource(resource, path, methods)
 
         scheme = self.api.config.get('PREFERRED_URL_SCHEME',
-            'http' if not self.api.config.get('PREFER_SECURE_URLS', False) else 'https')
+                                     'http' if not self.api.config.get('PREFER_SECURE_URLS', False) else 'https')
         spec = {
             'openapi': '3.0.0',
             'info': infos,
@@ -164,7 +172,8 @@ class Swagger(object):
         return OrderedDict((k, v) for k, v in self._components.items() if v)
 
 
-    def tags_for(self, doc: List[str]) -> Iterable[List[str]]:
+    @staticmethod
+    def tags_for(doc: List[str]) -> Iterable[List[str]]:
         """Get the list of tags for output
 
         :param doc: a mapping from HTTP verb to the properties for serialization
@@ -176,7 +185,8 @@ class Swagger(object):
         return tags
 
 
-    def description_for(self, doc: Dict[str, Any], method: str) -> str:
+    @staticmethod
+    def description_for(doc: Dict[str, Any], method: str) -> str:
         """Extract the description metadata and fallback on the whole docstring
 
         :param doc: a mapping from HTTP verb to the properties for serialization
@@ -238,21 +248,28 @@ class Swagger(object):
 
         __  https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#responseObject
         """
+        def process_response(resp: Union[str, Tuple]) -> Tuple[str, Any, Dict[str, Any]]:
+            description = ''
+            validator = None
+            kwargs = {}
+            if isinstance(resp, str):
+                description = resp
+                validator = None
+                kwargs = {}
+            elif len(resp) == 3:
+                description, validator, kwargs = resp
+            elif len(resp) == 2:
+                description, validator = resp
+                kwargs = {}
+            else:
+                raise ValueError('Unsupported response specification')
+            return (description, validator, kwargs)
+
         responses = {}
-        for d in doc, doc[method]:
-            if 'responses' in d:
-                for code, response in d['responses'].items():
-                    if isinstance(response, str):
-                        description = response
-                        validator = None
-                        kwargs = {}
-                    elif len(response) == 3:
-                        description, validator, kwargs = response
-                    elif len(response) == 2:
-                        description, validator = response
-                        kwargs = {}
-                    else:
-                        return ValueError('Unsupported response specification')
+        for obj in doc, doc[method]:
+            if 'responses' in obj:
+                for code, response in obj['responses'].items():
+                    description, validator, kwargs = process_response(response)
                     description = description or DEFAULT_RESPONSE_DESCRIPTION
                     if code in responses:
                         responses[code].update(description=description)
@@ -270,8 +287,9 @@ class Swagger(object):
             responses[HTTPStatus.OK.value] = self.process_headers(DEFAULT_RESPONSE.copy(), doc, method)
         return responses
 
-    def process_headers(self, response: Dict[str, Any], doc: Dict[str, Any], method: Optional[str]=None,
-                        headers: Optional[Dict[str, Union[str, Dict[str, Any]]]]=None) -> Dict[str, Any]:
+    @staticmethod
+    def process_headers(response: Dict[str, Any], doc: Dict[str, Any], method: Optional[str] = None,
+                        headers: Optional[Dict[str, Union[str, Dict[str, Any]]]] = None) -> Dict[str, Any]:
         """Properly form the header parameter objects according to the openapi 3.0 spec
 
         :param response: Response object definition
@@ -305,13 +323,14 @@ class Swagger(object):
                 'type': 'array',
                 'items': self.serialize_schema(validator)
             }
-        elif isinstance(validator, Draft4Validator):
+        if isinstance(validator, Draft4Validator):
             return validator.schema
-        elif isinstance(validator, str):
+        if isinstance(validator, str):
             validator = self.api.get_validator(validator)
             return validator.schema
-        elif isinstance(validator, (type, type(None))) and validator in PY_TYPES:
+        if isinstance(validator, (type, type(None))) and validator in PY_TYPES:
             return {'type': PY_TYPES[validator]}
+        return {}
 
     def serialize_resource(self, resource: Union[Resource, Callable], path: str,
                            methods: Iterable[str]) -> Dict[str, Any]:
@@ -326,7 +345,7 @@ class Swagger(object):
         """
         doc = self.extract_resource_doc(resource, path)
         if doc is False:
-            return
+            return {}
 
         path = {}
         for method in [m.lower() for m in resource.methods or []]:
@@ -358,7 +377,8 @@ class Swagger(object):
             operation['deprecated'] = True
         return not_none(operation)
 
-    def extract_resource_doc(self, resource: Union[Resource, Callable], path: str) -> Dict[str, Any]:
+    @staticmethod
+    def extract_resource_doc(resource: Union[Resource, Callable], path: str) -> Dict[str, Any]:
         """Return the doc mapping for this resource that we saved on it
 
         :param resource: The :class:`Resource` derived class or decorated view function
@@ -387,7 +407,7 @@ class Swagger(object):
             if method_doc is not False:
                 method_doc['docstring'] = parse_docstring(method_impl)
                 method_params = method_doc.get('params', {})
-                inherited_params = OrderedDict((k,v) for k, v in params.items())
+                inherited_params = OrderedDict((k, v) for k, v in params.items())
                 method_doc['params'] = merge(inherited_params, method_params)
                 method_tags = method_doc.get('tags', [])
                 inherited_tags = sorted(list(tags))
