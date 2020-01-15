@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Quart OpenAPI &#8212; Quart-OpenApi 1.5.0 documentation</title>
+    <title>Quart OpenAPI &#8212; Quart-OpenApi 1.5.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -117,9 +117,9 @@ to also install the dependencies from the extras ‘doc’ package like so:</p>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Pint</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Sample App&#39;</span><span class="p">)</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
-  <span class="n">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Hello World Route</span>
 
 <span class="sd">    This docstring will show up as the description and short-description</span>
@@ -132,8 +132,8 @@ to also install the dependencies from the extras ‘doc’ package like so:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quart</span> <span class="kn">import</span> <span class="n">Quart</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Quart</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="n">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
   <span class="k">return</span> <span class="s2">&quot;hello&quot;</span>
 </pre></div>
 </div>
@@ -168,12 +168,12 @@ and then use references to it. For an on-the-fly validator:</p>
   <span class="p">}</span>
 <span class="p">})</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Sample</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
-  <span class="nd">@app.expect</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
-  <span class="n">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1"># won&#39;t get here if the request didn&#39;t match the expected schema</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -201,15 +201,15 @@ and then use references to it. For an on-the-fly validator:</p>
               <span class="n">base_model_schema</span><span class="o">=</span><span class="s1">&#39;schema.json&#39;</span><span class="p">)</span>
 <span class="n">stream</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">create_ref_validator</span><span class="p">(</span><span class="s1">&#39;binaryData&#39;</span><span class="p">,</span> <span class="s1">&#39;schemas&#39;</span><span class="p">)</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Binary</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
-  <span class="nd">@app.expect</span><span class="p">((</span><span class="n">stream</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">,</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">expect</span><span class="p">((</span><span class="n">stream</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">,</span>
                <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip compressed data&#39;</span><span class="p">}))</span>
-  <span class="nd">@app.response</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">)</span>
-  <span class="n">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">response</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">)</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1"># if the request didn&#39;t have a &#39;content-type&#39; header with a value</span>
     <span class="c1"># of &#39;application/octet-stream&#39; it will be rejected as invalid.</span>
-    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1"># ... do something with the data</span>
     <span class="k">return</span> <span class="s2">&quot;Success!&quot;</span>
 </pre></div>
@@ -238,7 +238,7 @@ for content-types other than ‘application/json’.</p>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 </ul>
-<p><sub>Generated from version 1.5.0</sub></p>
+<p><sub>Generated from version 1.5.1</sub></p>
 </div>
 
 
