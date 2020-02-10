@@ -1,7 +1,7 @@
 """quart-openapi
 
 Quart-OpenAPI is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
-If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTPlus_
+If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTX_
 generating a swagger.json route and adds a Resource base class for building RESTful APIs.
 
 Documentation can be found on https://factset.github.io/quart-openapi/

@@ -1,5 +1,5 @@
 =============
-Quart-OpenAPI  
+Quart-OpenAPI
 =============
 
 .. image:: https://travis-ci.com/factset/quart-openapi.svg?branch=master
@@ -7,10 +7,18 @@ Quart-OpenAPI
 
 Documentation can be found on https://factset.github.io/quart-openapi/
 
+.. |ss| raw:: html
+
+    <strike>
+
+.. |se| raw:: html
+
+    </strike>
+
 .. inclusion-marker-do-not-remove
 
 Quart-OpenAPI is an extension for Quart_ that adds support for generating a openapi.json file using openapi 3.0.
-If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to Flask-RESTPlus_
+If you are familiar with Quart_, this just wraps around it to add a openapi.json route similar to |ss| Flask-RESTPlus |se| Flask-RESTX_
 generating a swagger.json route and adds a Resource base class for building RESTful APIs.
 
 Compatibility
@@ -84,7 +92,7 @@ Unit tests can be run through setuptools also:
 Request Validation
 ==================
 
-Request validation like you can get with Flask-RESTPlus_!
+Request validation like you can get with |ss| Flask-RESTPlus |se| Flask-RESTX_!
 
 You can either create validator models on the fly or you can create a jsonschema document for base models
 and then use references to it. For an on-the-fly validator:
@@ -157,4 +165,4 @@ for referencing models and creating validators. Currently the validator won't do
 for content-types other than 'application/json'.
 
 .. _Quart: https://pgjones.gitlab.io/quart/
-.. _Flask-RESTPlus: https://flask-restplus.readthedocs.io/en/stable/
+.. _Flask-RESTX: https://flask-restx.readthedocs.io/en/stable/
