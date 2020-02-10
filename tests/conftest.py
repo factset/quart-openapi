@@ -1,6 +1,6 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring
-import pytest
 from quart.__about__ import __version__ as quart_version
+import pytest
 from packaging import version
 from quart_openapi import Pint
 
