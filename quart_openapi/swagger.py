@@ -10,8 +10,8 @@ from typing import (Any, Callable, Dict, Generator, Iterable, List, Mapping,
                     Optional, Tuple, Union)
 
 from jsonschema import Draft4Validator
-from quart.routing import ROUTE_VAR_RE
 from quart.routing import Map as RouteMap
+from werkzeug.routing import _rule_re as ROUTE_VAR_RE
 
 from .resource import Resource, get_expect_args
 from .typing import HeaderType, ValidatorTypes

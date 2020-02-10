@@ -1,9 +1,9 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
 
-import pytest
 from jsonschema import RefResolver
 from quart import jsonify, request, url_for
+import pytest
 from quart_openapi import Pint, Resource
 
 # pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring,import-outside-toplevel

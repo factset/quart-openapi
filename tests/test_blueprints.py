@@ -1,9 +1,9 @@
 # pylint: disable=missing-module-docstring,missing-class-docstring
 from http import HTTPStatus
 
-import pytest
 from quart import Blueprint, ResponseReturnValue, abort, request, url_for
 from quart.views import MethodView
+import pytest
 from quart_openapi import Pint, PintBlueprint, Resource
 
 # pylint: disable=unused-variable,misplaced-comparison-constant,missing-function-docstring,import-outside-toplevel
