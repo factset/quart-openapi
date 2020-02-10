@@ -99,8 +99,8 @@
                     <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">jsonschema</span> <span class="kn">import</span> <span class="n">Draft4Validator</span>
-<span class="kn">from</span> <span class="nn">quart.routing</span> <span class="kn">import</span> <span class="n">ROUTE_VAR_RE</span>
 <span class="kn">from</span> <span class="nn">quart.routing</span> <span class="kn">import</span> <span class="n">Map</span> <span class="k">as</span> <span class="n">RouteMap</span>
+<span class="kn">from</span> <span class="nn">werkzeug.routing</span> <span class="kn">import</span> <span class="n">_rule_re</span> <span class="k">as</span> <span class="n">ROUTE_VAR_RE</span>
 
 <span class="kn">from</span> <span class="nn">.resource</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">get_expect_args</span>
 <span class="kn">from</span> <span class="nn">.typing</span> <span class="kn">import</span> <span class="n">HeaderType</span><span class="p">,</span> <span class="n">ValidatorTypes</span>
