@@ -4,7 +4,7 @@ import os
 import re
 from setuptools import setup
 
-# Based on flask-restplus setup.py
+# Based on flask-restx setup.py
 
 RE_REQUIREMENT = re.compile(r'^\s*-r\s*(?P<filename>.*)$')
 
