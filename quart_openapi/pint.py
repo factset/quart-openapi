@@ -496,13 +496,14 @@ class PintBlueprint(BaseRest, Blueprint):
         """Will forward all arguments and keyword arguments to Blueprints"""
         super().__init__(*args, **kwargs)
 
-    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str] = None) -> None:
+    # pylint: disable=arguments-differ
+    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str] = None, **kwargs) -> None:
         """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
         this blueprint, then call the parent register method
         """
         prefix = url_prefix or self.url_prefix or ''
         app.resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
-        super().register(app, first_registration, url_prefix=url_prefix)
+        super().register(app, first_registration, url_prefix=url_prefix, **kwargs)
 
 class OpenApiView(Resource):
     """The :class:`Resource` used for the '/openapi.json' route
