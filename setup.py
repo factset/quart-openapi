@@ -68,6 +68,7 @@ setup(
     version=__release__,
     description=__description__,
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     url='https://github.com/factset/quart-openapi',
     author='Matt Topol',
     author_email='mtopol@factset.com',
