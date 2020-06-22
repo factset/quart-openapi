@@ -196,7 +196,7 @@ class BaseRest():
                 setattr(resource, f'_pint_{resource.__name__}_view_wrapper', view_func)
             methods = list(resource.methods)
             self._resources.append((resource, path, methods))
-        super().add_url_rule(path, endpoint, view_func, methods,  # pylint: disable=no-member
+        super().add_url_rule(path, endpoint, view_func, methods=methods,  # pylint: disable=no-member
                              provide_automatic_options=provide_automatic_options, **kwargs)
 
     def param(self, name: str, description: Optional[str] = None, _in: str = 'query', **kwargs: Any) -> Callable:
@@ -497,13 +497,13 @@ class PintBlueprint(BaseRest, Blueprint):
         super().__init__(*args, **kwargs)
 
     # pylint: disable=arguments-differ
-    def register(self, app: Pint, first_registration: bool, *, url_prefix: Optional[str] = None, **kwargs) -> None:
+    def register(self, app: Pint, options: dict, first_registration: bool = False) -> None:
         """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
         this blueprint, then call the parent register method
         """
-        prefix = url_prefix or self.url_prefix or ''
+        prefix = options.get('url_prefix', '') or self.url_prefix or ''
         app.resources.extend([(res, f'{prefix}{path}', methods) for res, path, methods in self._resources])
-        super().register(app, first_registration, url_prefix=url_prefix, **kwargs)
+        super().register(app, options, first_registration)
 
 class OpenApiView(Resource):
     """The :class:`Resource` used for the '/openapi.json' route
