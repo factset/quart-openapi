@@ -496,7 +496,6 @@ class PintBlueprint(BaseRest, Blueprint):
         """Will forward all arguments and keyword arguments to Blueprints"""
         super().__init__(*args, **kwargs)
 
-    # pylint: disable=arguments-differ
     def register(self, app: Pint, options: dict, first_registration: bool = False) -> None:
         """override the base :meth:`~quart.Blueprint.register` method to add the resources to the app registering
         this blueprint, then call the parent register method

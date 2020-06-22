@@ -18,6 +18,9 @@ Compatibility
 
 Quart-OpenAPI requires Python 3.6+ because Quart_ requires it.
 
+Starting from version 1.6.0, Quart-OpenAPI requires python 3.7+ in order to avoid having to maintain multiple versions
+of function definitions for compatibility with the older versions of Quart_ that supported Python 3.6.
+
 Installation
 ============
 
