@@ -1,8 +1,7 @@
-dist: xenial
+dist: bionic
 language: python
 python:
-  - "3.6"
-  - "3.7.1"
+  - "3.7"
 
 install: python3 setup.py install
 script: python3 setup.py test

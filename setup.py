@@ -77,7 +77,7 @@ setup(
     install_requires=install_requires,
     setup_requires=setup_requires,
     tests_require=tests_require,
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     license='Apache 2.0',
     keywords='quart swagger api rest openapi flask',
     extras_require={
