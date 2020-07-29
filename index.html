@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quart OpenAPI &#8212; Quart-OpenApi 1.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="quart_openapi" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Quart-OpenApi</a></h1>
+
+
+
+<p class="blurb">Framework for Quart to add swagger generation to routes and restful resources</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=factset&repo=quart-openapi&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">quart_openapi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pint.html">Pint Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pint.html#pintblueprint-class">PintBlueprint Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pint.html#openapiview-helper">OpenApiView helper</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resource.html">Resource Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swagger.html">Swagger Class</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation-for-quart-openapi">
+<h1>Documentation for Quart-OpenAPI!<a class="headerlink" href="#documentation-for-quart-openapi" title="Permalink to this headline">¶</a></h1>
+<p>Quart-OpenAPI is an extension for <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a> that adds support for generating a openapi.json file using openapi 3.0.
+If you are familiar with <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a>, this just wraps around it to add a openapi.json route similar to <a class="reference external" href="https://flask-restx.readthedocs.io/en/stable/">Flask-RESTX</a>
+generating a swagger.json route and adds a Resource base class for building RESTful APIs.</p>
+</div>
+<div class="section" id="compatibility">
+<h1>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h1>
+<p>Quart-OpenAPI requires Python 3.6+ because <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a> requires it.</p>
+<p>Starting from version 1.6.0, Quart-OpenAPI requires python 3.7+ in order to avoid having to maintain multiple versions
+of function definitions for compatibility with the older versions of <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a> that supported Python 3.6.</p>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>You can install via pip</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install quart-openapi
+</pre></div>
+</div>
+<p>If you are developing the module and want to also be able to build the documentation, make sure
+to also install the dependencies from the extras ‘doc’ package like so:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install <span class="s1">&#39;quart-openapi[doc]&#39;</span>
+<span class="gp">$</span> python setup.py build_sphinx
+</pre></div>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<p>If you’re familiar with <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a> then the quick start doesn’t change much:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quart_openapi</span> <span class="kn">import</span> <span class="n">Pint</span><span class="p">,</span> <span class="n">Resource</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Pint</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Sample App&#39;</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Hello World Route</span>
+
+<span class="sd">    This docstring will show up as the description and short-description</span>
+<span class="sd">    for the openapi docs for this route.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="s2">&quot;hello&quot;</span>
+</pre></div>
+</div>
+<p>This is equivalent to using the following with <a class="reference external" href="https://pgjones.gitlab.io/quart/">Quart</a> as normal:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quart</span> <span class="kn">import</span> <span class="n">Quart</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Quart</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+  <span class="k">return</span> <span class="s2">&quot;hello&quot;</span>
+</pre></div>
+</div>
+<p>Except that by using <a class="reference internal" href="pint.html#quart_openapi.Pint" title="quart_openapi.Pint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pint</span></code></a> and <a class="reference internal" href="resource.html#quart_openapi.Resource" title="quart_openapi.Resource"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> it will also
+add a route for ‘/openapi.json’ which will contain the documentation of the route and use the docstring for the
+description.</p>
+</div>
+<div class="section" id="unit-tests">
+<h1>Unit Tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h1>
+<p>Unit tests can be run through setuptools also:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py <span class="nb">test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="request-validation">
+<h1>Request Validation<a class="headerlink" href="#request-validation" title="Permalink to this headline">¶</a></h1>
+<p>Request validation like you can get with <a class="reference external" href="https://flask-restx.readthedocs.io/en/stable/">Flask-RESTX</a>!</p>
+<p>You can either create validator models on the fly or you can create a jsonschema document for base models
+and then use references to it. For an on-the-fly validator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">expected</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">create_validator</span><span class="p">(</span><span class="s1">&#39;sample_request&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;foobar&#39;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;baz&#39;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s1">&#39;oneOf&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;integer&#39;</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span> <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Sample</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">expect</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># won&#39;t get here if the request didn&#39;t match the expected schema</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default content type is ‘application/json’, but you can specify otherwise in the decorator:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">schema.json</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/schema#&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;schema.json&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;components&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;schemas&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;binaryData&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;binary&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">app.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">Pint</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Validation Example&#39;</span><span class="p">,</span>
+              <span class="n">base_model_schema</span><span class="o">=</span><span class="s1">&#39;schema.json&#39;</span><span class="p">)</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">create_ref_validator</span><span class="p">(</span><span class="s1">&#39;binaryData&#39;</span><span class="p">,</span> <span class="s1">&#39;schemas&#39;</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Binary</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">expect</span><span class="p">((</span><span class="n">stream</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">,</span>
+               <span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;gzip compressed data&#39;</span><span class="p">}))</span>
+  <span class="nd">@app</span><span class="o">.</span><span class="n">response</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">)</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># if the request didn&#39;t have a &#39;content-type&#39; header with a value</span>
+    <span class="c1"># of &#39;application/octet-stream&#39; it will be rejected as invalid.</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># ... do something with the data</span>
+    <span class="k">return</span> <span class="s2">&quot;Success!&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>In the example above, it’ll open, read, and json parse the file <em>schema.json</em> and then use it as the basis
+for referencing models and creating validators. Currently the validator won’t do more than validate content-type
+for content-types other than ‘application/json’.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">quart_openapi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pint.html">Pint Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pint.html#pintblueprint-class">PintBlueprint Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pint.html#openapiview-helper">OpenApiView helper</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="resource.html">Resource Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="swagger.html">Swagger Class</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+</ul>
+<p><sub>Generated from version 1.6.0</sub></p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2018, FactSet Research Systems, Inc..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
