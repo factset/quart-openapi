@@ -10,6 +10,7 @@ from quart import request
 from quart.typing import ResponseReturnValue
 from quart.views import MethodView
 
+from .marshmallow import MARSHMALLOW, Schema
 from .typing import ExpectedDescList, ValidatorTypes
 
 LOGGER = logging.getLogger('quart.serving')
@@ -85,6 +86,8 @@ class Resource(MethodView):
                     validator, content_type, _ = get_expect_args(expect)
                     if content_type == 'application/json' and request.is_json:
                         data = await request.get_json(force=True, cache=True)
+                        if MARSHMALLOW and isinstance(validator, Schema):
+                            return validator.load(data)
                         return validator.validate(data)
                     if content_type == request.mimetype:
                         return

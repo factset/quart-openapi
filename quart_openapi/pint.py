@@ -16,6 +16,7 @@ from jsonschema.exceptions import ValidationError
 from quart import Blueprint, Quart, jsonify
 from quart.views import http_method_funcs
 
+from .marshmallow import MARSHMALLOW, MarshmallowValidationError
 from .cors import crossdomain
 from .resource import Resource
 from .typing import ExpectedDescList, ValidatorTypes
@@ -83,6 +84,8 @@ class BaseRest():
             elif isinstance(base_model_schema, RefResolver):
                 self._ref_resolver = base_model_schema
         self.register_error_handler(ValidationError, self.handle_json_validation_exc)  # pylint: disable=no-member
+        if MARSHMALLOW:
+            self.register_error_handler(MarshmallowValidationError, self.handle_marshmallow_json_validation_exc)  # pylint: disable=no-member
 
     @property
     def title(self) -> str:
@@ -140,6 +143,34 @@ class BaseRest():
             }
         }), HTTPStatus.BAD_REQUEST.value
 
+    @staticmethod
+    def handle_marshmallow_json_validation_exc(error: MarshmallowValidationError
+                                               ) -> Dict[str, Union[str, Dict[str, str]]]:
+        """Function to handle validation errors
+
+        The constructor will register this function to handle a :exc:`~marshmallow.ValidationError`
+        which is thrown by the :mod:`marshmallow` validation routines.
+
+        :param error: The exception that was raised
+        :return: Json message with the validation error
+
+        .. seealso::
+
+           :meth:`quart.Quart.register_error_handler`
+               Registering error handlers with quart
+        """
+        LOGGER.error('request body validation failed, returning error: msg: %s, instance: %r',
+                     error.messages, error.data)
+        err = {
+            'msg': error.messages,
+            'value': error.data
+        }
+        if hasattr(error, 'schema'):
+            err['schema'] = error.schema
+        return jsonify({
+            'message': 'Request Body failed validation',
+            'error': err
+        }), HTTPStatus.BAD_REQUEST
 
     @property
     def resources(self) -> Iterable[Tuple[Resource, str, Iterable[str]]]:
