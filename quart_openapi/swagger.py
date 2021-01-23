@@ -13,8 +13,9 @@ from jsonschema import Draft4Validator
 from quart.routing import Map as RouteMap
 from werkzeug.routing import _rule_re as ROUTE_VAR_RE
 
+from .marshmallow import MARSHMALLOW, schema_to_json
 from .resource import Resource, get_expect_args
-from .typing import HeaderType, ValidatorTypes
+from .typing import HeaderType, ValidatorTypes, Schema
 from .utils import extract_path, merge, not_none, parse_docstring
 
 DEFAULT_RESPONSE_DESCRIPTION = 'Success'
@@ -328,6 +329,8 @@ class Swagger():
         if isinstance(validator, str):
             validator = self.api.get_validator(validator)
             return validator.schema
+        if MARSHMALLOW and isinstance(validator, Schema):
+            return schema_to_json(validator)
         if isinstance(validator, (type, type(None))) and validator in PY_TYPES:
             return {'type': PY_TYPES[validator]}
         return {}
@@ -432,6 +435,8 @@ class Swagger():
             validator, content_type, kwargs = get_expect_args(expect)
             if isinstance(validator, str):
                 validator = self.api.get_validator(validator)
+            elif MARSHMALLOW and isinstance(validator, Schema):
+                pass
             elif not isinstance(validator, Draft4Validator):
                 continue
 

@@ -1,1 +1,3 @@
 pytest-runner
+marshmallow >= 3.0.0
+marshmallow-jsonschema >= 0.10.0
