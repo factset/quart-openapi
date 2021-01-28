@@ -25,4 +25,3 @@ except ImportError:
     def schema_to_json():
         """provide empty implmentation for the case where
         marshmallow importing failed."""
-        pass
