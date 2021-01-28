@@ -21,4 +21,6 @@ except ImportError:
     JSONSchema = None
     MarshmallowValidationError = None
     MARSHMALLOW = False
-    schema_to_json = None
+
+    def schema_to_json():
+        pass
