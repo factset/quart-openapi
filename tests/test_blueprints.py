@@ -85,9 +85,9 @@ async def test_blueprint_method_view(app: Pint) -> None:
 
     test_client = app.test_client()
     response = await test_client.get('/')
-    assert 'GET' == (await response.get_data(raw=False))
+    assert 'GET' == (await response.get_data(as_text=True))
     response = await test_client.post('/')
-    assert 'POST' == (await response.get_data(raw=False))
+    assert 'POST' == (await response.get_data(as_text=True))
 
 @pytest.mark.asyncio
 async def test_pint_blueprint_openapi(app: Pint, req_ctx) -> None:
@@ -114,9 +114,9 @@ async def test_blueprint_resource(app: Pint) -> None:
 
     client = app.test_client()
     response = await client.post('/testing')
-    assert 'POST' == (await response.get_data(raw=False))
+    assert 'POST' == (await response.get_data(as_text=True))
     response = await client.get('/testing')
-    assert 'GET' == (await response.get_data(raw=False))
+    assert 'GET' == (await response.get_data(as_text=True))
 
 @pytest.mark.asyncio
 async def test_openapi_with_blueprint(app: Pint) -> None:

@@ -33,7 +33,7 @@ def parse_docstring(obj: object) -> Dict[str, Union[str, List, Dict[str, str], N
                            found via ':raises ...:'
     """
     raw = getdoc(obj)
-    summary = raw.strip(' \n').split('\n')[0].split('.')[0] if raw else None
+    summary = raw.strip(' \n').split('\n', maxsplit=1)[0].split('.')[0] if raw else None
     raises = {}
     details = raw.replace(summary, '').lstrip('. \n').strip(' \n') if raw else None
     for match in _RE_RAISES.finditer(raw or ''):
