@@ -2,7 +2,7 @@
 
 Provides the View class for generating the openapi.json file on the fly based on the Pint instance and decorators
 """
-
+import re
 from collections import OrderedDict
 from http import HTTPStatus
 from itertools import chain
@@ -11,7 +11,22 @@ from typing import (Any, Callable, Dict, Generator, Iterable, List, Mapping,
 
 from jsonschema import Draft4Validator
 from quart.routing import Map as RouteMap
-from werkzeug.routing import _rule_re as ROUTE_VAR_RE
+#from werkzeug.routing import _rule_re as ROUTE_VAR_RE
+#from werkzeug.routing import _rule_re as ROUTE_VAR_RE
+ROUTE_VAR_RE = re.compile(
+    r"""
+    (?P<static>[^<]*)                           # static rule data
+    <
+    (?:
+        (?P<converter>[a-zA-Z_][a-zA-Z0-9_]*)   # converter name
+        (?:\((?P<args>.*?)\))?                  # converter arguments
+        \:                                      # variable delimiter
+    )?
+    (?P<variable>[a-zA-Z_][a-zA-Z0-9_]*)        # variable name
+    >
+    """,
+    re.VERBOSE,
+)
 
 from .marshmallow import MARSHMALLOW, schema_to_json
 from .resource import Resource, get_expect_args
