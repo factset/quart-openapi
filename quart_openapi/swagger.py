@@ -11,7 +11,7 @@ from typing import (Any, Callable, Dict, Generator, Iterable, List, Mapping,
 
 from jsonschema import Draft4Validator
 from quart.routing import Map as RouteMap
-from werkzeug.routing import _rule_re as ROUTE_VAR_RE
+from werkzeug.routing import _part_re as ROUTE_VAR_RE
 
 from .marshmallow import MARSHMALLOW, schema_to_json
 from .resource import Resource, get_expect_args
